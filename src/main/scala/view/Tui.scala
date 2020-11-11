@@ -7,6 +7,8 @@ import util.Observer
 import scala.collection.mutable.ListBuffer
 import scala.io.StdIn.readLine
 
+// Trigger Travis CI
+
 class Tui(controller: Controller) extends Observer{
   controller.add(this)
   var currentPlayer = Player("", 0, 0)
