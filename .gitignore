@@ -1,10 +1,26 @@
-*.class
-*.log
+# Mac
+.DS_Store
 
-# sbt specific
+# Eclipse
+bin/
+.settings/
+.classpath
+
+# Intellij
+.idea/
+target/
+
+# Maven
+log/
+target/
+
+# Gradle
+.gradle/
+build/
+pom.xml
+
+# sbt
 .cache
-.cache-main
-.cache-tests
 .history
 .lib/
 dist/*
@@ -13,14 +29,18 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
-
-# Ignore Eclipse files
-.project
-.classpath
-.prefs
-.settings
+project/target/
+project/project/
+logs/
+project/.sbtserver
+.sbtserver/
 
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
-/bin/
+
+# Sonar
+.sonar/
+
+# Application
+Mill.log
