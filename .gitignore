@@ -43,4 +43,4 @@ project/.sbtserver
 .sonar/
 
 # Application
-Mill.log
+Mill2.log
