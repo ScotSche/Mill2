@@ -1,8 +1,9 @@
 import controller.Controller
 import model.Board
 import view.Tui
-
 import scala.io.StdIn.readLine
+
+// Trigger Travis CI
 
 object Mill {
 
