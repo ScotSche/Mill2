@@ -1,0 +1,1 @@
+addSbtPlugin("org.jetbrains" % "sbt-idea-compiler-indices" % "0.1.3")
