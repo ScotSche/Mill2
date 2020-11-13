@@ -1,7 +1,7 @@
 package view
 
 import controller.Controller
-import model.{Board, Player, Stone}
+import model.{Board, MaybeInput, Player, Stone}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -12,6 +12,11 @@ class TuiSpec extends AnyWordSpec with Matchers{
     val controller = new Controller(new Board, Vector())
     controller.create_new_Players("PlayerOne", "PlayerTwo")
     val tui = new Tui(controller)
+    val board = new Board
+    val board1= board.update_board(1, 1,1)
+    val board2= board1.update_board(1,0,2)
+    val board3= board2.update_board(1, 2,1)
+    val board4= board3.update_board(1, 3,1)
     "create a new board on input 'n'" in{
       tui.processInputLine("n")
       controller.board should be(new Board)
@@ -183,6 +188,11 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.updateBoard(emptyBoard) should be(emptyBoardString)
       tui.updateBoard(filledPlayerOneBoard) should be(filledPlayerOneBoardString)
       tui.updateBoard(filledPlayerTwoBoard) should be(filledPlayerTwoBoardString)
+    }
+    "wait for a valid input" in{
+      val result = MaybeInput(Some("21")).validLength.validInt.validCoordinates.checkCompStone(board4, controller, 1).input
+      result.isDefined should be(true)
+
     }
   }
 }
