@@ -50,10 +50,19 @@ class BoardSpec extends AnyWordSpec with Matchers{
       }
       "check if player achieved a 'mill'" in {
         //board.check_board_for_mill(1) should be(false)
-        var millBoard = board.update_board(0, 0, 1)
-        millBoard = millBoard.update_board(0, 1, 1)
+        var oldBoard = board.update_board(0, 0, 1)
+        var millBoard = oldBoard.update_board(0, 1, 1)
         millBoard = millBoard.update_board(0, 2, 1)
-        //millBoard.check_board_for_mill(1) should be(true)
+        millBoard.check_board_for_mill(oldBoard, 1) should be(true)
+        millBoard.check_board_for_mill(oldBoard, 2) should be(false)
+
+        oldBoard = oldBoard.update_board(0,1,1)
+        oldBoard = oldBoard.update_board(0,2,1)
+        millBoard.check_board_for_mill(oldBoard, 1) should be(false)
+        
+        millBoard = millBoard.update_board(0,1,0)
+        millBoard.check_board_for_mill(oldBoard, 1) should be(false)
+
       }
     }
   }

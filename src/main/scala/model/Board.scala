@@ -14,10 +14,6 @@ case class Board(stones: BoardMatrix[Stone]) {
     stones.stone(rectangle_num, position_num).isSet
   }
 
-  def check_stone(rectangle_num: Int, position_num:Int): Stone ={
-    stones.stone(rectangle_num, position_num)
-  }
-
   def amount_of_played_stones(color: Int): Int = {
     stones.amountOfPlayedStones(color)
   }

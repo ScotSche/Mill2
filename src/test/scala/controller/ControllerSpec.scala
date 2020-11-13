@@ -9,6 +9,8 @@ class ControllerSpec extends AnyWordSpec with Matchers{
   "A Controller" when {
     "observed by a Observer" should {
       val board = new Board
+      val board1= board.update_board(1, 1,1)
+      val board2= board1.update_board(1,0,2)
       val controller = new Controller(board, Vector())
       val observer = new Observer {
         var updated: Boolean = false
@@ -55,6 +57,17 @@ class ControllerSpec extends AnyWordSpec with Matchers{
         controller.remove_stone(0, 0, 2) should be(true)
         controller.remove_stone(0, 0, 1) should be(false)
         controller.remove_stone(0, 1, 1) should be(false)
+      }
+      "move the stone from one position to another" in{
+        controller.moveStone((1,0),(1,3), 1)
+        observer.updated should be(true)
+        controller.board.stone(1,0).color should be(0)
+        controller.board.stone(1,3).color should be(1)
+      }
+      "return competitor color" in {
+        controller.getCompetitorStone(1) should be(2)
+        controller.getCompetitorStone(2) should be(1)
+        controller.getCompetitorStone(5) should be(0)
       }
     }
   }
