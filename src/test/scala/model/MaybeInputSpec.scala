@@ -60,6 +60,11 @@ class MaybeInputSpec extends AnyWordSpec with Matchers{
         MaybeInput(None).checkStone(board2, 1).input should be(None)
 
       }
+      "check if stone position is set by competitor stone" in{
+        MaybeInput(Some(List(2,1))).checkCompStone(board2, controller, 1).input should be(Some(List(2,1)))
+        MaybeInput(Some(List(2,1))).checkCompStone(board2, controller, 2).input should be(None)
+        MaybeInput(None).checkCompStone(board2, controller, 1).input should be(None)
+      }
     }
   }
 }

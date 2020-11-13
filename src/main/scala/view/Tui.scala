@@ -253,7 +253,7 @@ class Tui(controller: Controller) extends Observer{
     if (controller.newMill) {
       println(s"New Mill on Board\n${currentPlayer.name} what stone do you want to remove?")
       val input = readLine()
-      val result = MaybeInput(Some(input)).validLength.validInt.validCoordinates.input
+      val result = MaybeInput(Some(input)).validLength.validInt.validCoordinates.checkCompStone(controller.board, controller, currentPlayer.color).input
       if (result.isDefined) {
         result match {
           case Some(data: List[Int]) => println(controller.remove_stone(data(0) - 1, data(1) - 1, currentPlayer.color))

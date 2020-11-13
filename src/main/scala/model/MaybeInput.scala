@@ -1,5 +1,7 @@
 package model
 
+import controller.Controller
+
 case class MaybeInput(input:Option[Any]){
   def validLength: MaybeInput = input match {
     case Some(in: String) => if(in.length == 2) copy(Some(in)) else copy(None)
@@ -75,5 +77,12 @@ case class MaybeInput(input:Option[Any]){
     val legal_moves_bt_rectangles = list_of_moves.filter(move => move._1>=0 && move._1<=2)
     legal_moves_bt_rectangles
 
+  }
+
+  def checkCompStone(board: Board, controller: Controller, color:Int): MaybeInput = input match {
+    case Some(in: List[Int]) => {
+      if (board.stone(in.head -1, in(1)-1).color == controller.getCompetitorStone(color)) copy(Some(in)) else copy (None)
+    }
+    case None => copy(None)
   }
 }
