@@ -50,7 +50,6 @@ class Tui(controller: Controller) extends Observer{
               verifiedInput match {
                 case Some(data: List[Int]) =>
                   controller.setStone((data.head - 1), (data(1) - 1), currentPlayer.color)
-                case _ =>
               }
             }
             else println("Invalid")
@@ -69,7 +68,6 @@ class Tui(controller: Controller) extends Observer{
                     gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
                     gpTwoSeparator = !gpTwoSeparator
                     println(playerGamePhaseTwoTurns())
-                  case _ =>
                 }
               }
               else println("Invalid")

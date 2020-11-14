@@ -43,6 +43,24 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("11")
       controller.board.stone(0, 0) should be(Stone(1))
     }
+    "should handle an invalid input in GPONE" in {
+      controller.gameStatus = GameStatus.GPONE
+      tui.currentPlayer = controller.players(0)
+      tui.processGameInputLine("Invalid")
+    }
+    "should handle a valid input in GPTWO" in {
+      controller.gameStatus = GameStatus.GPTWO
+      tui.currentPlayer = controller.players(0)
+      tui.gpTwoSeparator = false
+      tui.processGameInputLine("11")
+      val testList1 = tui.gpTwoList.toList
+      testList1(0) should be((0, 0))
+    }
+    "should handle an invalid input in GPTWO" in {
+      controller.gameStatus = GameStatus.GPTWO
+      tui.currentPlayer = controller.players(0)
+      tui.processGameInputLine("Invalid")
+    }
 
     "should provide a welcome screen" in {
       val welcomeScreen =
