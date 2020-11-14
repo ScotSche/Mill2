@@ -66,23 +66,12 @@ class Controller(var board: Board, var players: Vector[Player]) extends Observab
     }
   }
 
-  def remove_stone(rect_num: Int, pos_num: Int, color: Int): Boolean = {
+  def remove_stone(rect_num: Int, pos_num: Int, color: Int): Unit = {
     val compStoneColor = getCompetitorStone(color)
-
-    if(board.stone(rect_num, pos_num) == Stone(compStoneColor)) {
       board = board.update_board(rect_num, pos_num, 0)
-      println(board)
       players(compStoneColor - 1).MAX_STONE -= 1
       newMill = false;
       notifyObservers
-      true
-    }
-    else{
-      false
-    }
+      notifyPlayerObserver
   }
-
-  //def select_stone()
-
-  //def end_of_game()
 }

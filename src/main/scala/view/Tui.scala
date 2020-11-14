@@ -14,6 +14,7 @@ class Tui(controller: Controller) extends Observer{
   var currentPlayer = Player("", 0, 0)
   var gpTwoSeparator = false
   var gpTwoList = new ListBuffer[(Int, Int)]()
+  var newMill = false
 
   def processInputLine(input: String): Unit = {
     input match {
@@ -38,20 +39,44 @@ class Tui(controller: Controller) extends Observer{
       case _ =>
         controller.gameStatus match {
           case GameStatus.GPONE =>
-            val verifiedInput = MaybeInput(Some(input))
-              .validLength
-              .validInt
-              .validCoordinates
-              .validateStone(controller.board)
-              .input
+            if( !newMill) {
+              val verifiedInput = MaybeInput(Some(input))
+                .validLength
+                .validInt
+                .validCoordinates
+                .validateStone(controller.board)
+                .input
 
-            if (verifiedInput.isDefined) {
-              verifiedInput match {
-                case Some(data: List[Int]) =>
-                  controller.setStone((data.head - 1), (data(1) - 1), currentPlayer.color)
+              if (verifiedInput.isDefined) {
+                verifiedInput match {
+                  case Some(data: List[Int]) =>
+                    controller.setStone((data.head - 1), (data(1) - 1), currentPlayer.color)
+                }
               }
+              else println("Invalid")
             }
-            else println("Invalid")
+            else{
+              val verifiedInput = MaybeInput(Some(input))
+                .validLength
+                .validInt
+                .validCoordinates
+                .checkStone(controller.board, {
+                  val optionPlayer = controller.players.find(_ != currentPlayer)
+                  optionPlayer match {
+                    case Some(player: Player) => player.color
+                  }
+                })
+                .input
+
+              if (verifiedInput.isDefined) {
+                verifiedInput match {
+                  case Some(data: List[Int]) =>
+                    newMill = !newMill
+                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
+                }
+              }
+              else println("Invalid")
+            }
 
           case GameStatus.GPTWO =>
             if (!gpTwoSeparator) {
@@ -290,7 +315,7 @@ class Tui(controller: Controller) extends Observer{
     }
     if (controller.newMill) {
       println(s"New Mill on Board\n${currentPlayer.name} what stone do you want to remove?")
-      waitForPlayerToRemoveStone()
+      newMill = !newMill
     }
   }
 
@@ -310,29 +335,31 @@ class Tui(controller: Controller) extends Observer{
   }
 
   override def updatePlayer: Unit = {
-    currentPlayer = changePlayer(controller.players)
-    controller.gameStatus match {
-      case GameStatus.GPONE =>
-        if (controller.amountOfPlayerStones(1) == controller.players(0).MAX_STONE &&
-          controller.amountOfPlayerStones(2) == controller.players(1).MAX_STONE) {
-          println(gamePhaseTwoBegin())
-          println(mainGamePhaseTurns())
-        }
-        else println(playerGamePhaseOneTurns())
+    if ( !newMill) {
+      currentPlayer = changePlayer(controller.players)
+      controller.gameStatus match {
+        case GameStatus.GPONE =>
+          if (controller.amountOfPlayerStones(1) == controller.players(0).MAX_STONE &&
+            controller.amountOfPlayerStones(2) == controller.players(1).MAX_STONE) {
+            println(gamePhaseTwoBegin())
+            println(mainGamePhaseTurns())
+          }
+          else println(playerGamePhaseOneTurns())
 
-      case GameStatus.GPTWO =>
-        if(controller.players(0).MAX_STONE == 3 || controller.players(1).MAX_STONE == 3) {
-          println(gamePhaseThreeBegin())
-          println(mainGamePhaseTurns())
-        } else println(mainGamePhaseTurns())
+        case GameStatus.GPTWO =>
+          if (controller.players(0).MAX_STONE == 3 || controller.players(1).MAX_STONE == 3) {
+            println(gamePhaseThreeBegin())
+            println(mainGamePhaseTurns())
+          } else println(mainGamePhaseTurns())
 
-      case GameStatus.GPTHREE =>
-        if(controller.players(0).MAX_STONE == 2){
-          println(endGameScreen(controller.players(1)))
-        }
-        else if(controller.players(1).MAX_STONE == 2){
-          println(endGameScreen(controller.players(0)))
-        }
+        case GameStatus.GPTHREE =>
+          if (controller.players(0).MAX_STONE == 2) {
+            println(endGameScreen(controller.players(1)))
+          }
+          else if (controller.players(1).MAX_STONE == 2) {
+            println(endGameScreen(controller.players(0)))
+          }
+      }
     }
   }
 }
