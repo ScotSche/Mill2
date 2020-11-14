@@ -278,7 +278,6 @@ class Tui(controller: Controller) extends Observer{
         } else println(mainGamePhaseTurns())
 
       case GameStatus.GPTHREE =>
-      case _ =>
     }
   }
 }

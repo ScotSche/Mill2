@@ -2,6 +2,10 @@ language: scala
 scala:
   - 2.13.3
 
+env:
+  global:
+    - IGNORE_NAMES=Mill.scala
+
 script:
   - sbt clean coverage test coverageReport
 
