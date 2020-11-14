@@ -124,6 +124,16 @@ class TuiSpec extends AnyWordSpec with Matchers{
       val playerMsg = "\nYour Name it is your turn Place one stone on a specific coordinate (1 of 9):"
       tui.playerGamePhaseOneTurns() should be(playerMsg)
     }
+    "should provide a dialog in GPTWO for player interaction" in {
+      tui.currentPlayer = controller.players(0)
+      tui.gpTwoSeparator = false
+      tui.playerGamePhaseTwoTurns() should be("PlayerOne choose the stone you want to move:")
+      tui.gpTwoSeparator = true
+      tui.playerGamePhaseTwoTurns() should be("PlayerOne where do you want to place it:")
+    }
+    "should provide the current gamescore (amount of stones)" in {
+      tui.currentGameScore() should be("                                         9 vs. 9\n")
+    }
     "should update the board with new stones" in {
       val emptyBoard = new Board
       val filledPlayerOneBoard = emptyBoard.update_board(0, 0, 1)
