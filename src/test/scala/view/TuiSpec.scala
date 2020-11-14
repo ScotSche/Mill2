@@ -42,6 +42,9 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.currentPlayer = controller.players(0)
       tui.processGameInputLine("11")
       controller.board.stone(0, 0) should be(Stone(1))
+
+      tui.processGameInputLine("12")
+      controller.board.stone(0, 1) should be(Stone(2))
     }
     "should handle an invalid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE
@@ -144,7 +147,8 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.stoneWarning() should be(warningMsg)
     }
     "should provide a message to show which player is playing with the amount of stones played" in {
-      tui.currentPlayer = new Player("Your Name", 2, 9)
+      controller.create_empty_Board()
+      tui.currentPlayer = new Player("Your Name", 1, 9)
       val playerMsg = "\nYour Name it is your turn Place one stone on a specific coordinate (1 of 9):"
       tui.playerGamePhaseOneTurns() should be(playerMsg)
     }
