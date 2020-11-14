@@ -275,9 +275,10 @@ class TuiSpec extends AnyWordSpec with Matchers{
 
     }
     "should change from GPTWO to GPTHREE" in {
-      controller.players(0).MAX_STONE = 3
+      controller.gameStatus = GameStatus.GPTWO
       controller.create_empty_Board()
-      controller.setStone(0, 0, 2)
+      controller.players(0).MAX_STONE = 3
+      controller.setStone(0, 0, 0)
       controller.gameStatus should be(GameStatus.GPTHREE)
     }
   }
