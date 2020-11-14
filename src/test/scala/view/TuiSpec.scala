@@ -37,6 +37,12 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should print the help board on input 'h' in game mode" in {
       tui.processGameInputLine("h")
     }
+    "should handle a valid input in GPONE" in {
+      controller.gameStatus = GameStatus.GPONE
+      tui.currentPlayer = controller.players(0)
+      tui.processGameInputLine("11")
+      controller.board.stone(0, 0) should be(Stone(1))
+    }
 
     "should provide a welcome screen" in {
       val welcomeScreen =
@@ -120,7 +126,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.stoneWarning() should be(warningMsg)
     }
     "should provide a message to show which player is playing with the amount of stones played" in {
-      tui.currentPlayer = new Player("Your Name", 1, 9)
+      tui.currentPlayer = new Player("Your Name", 2, 9)
       val playerMsg = "\nYour Name it is your turn Place one stone on a specific coordinate (1 of 9):"
       tui.playerGamePhaseOneTurns() should be(playerMsg)
     }

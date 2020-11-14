@@ -37,7 +37,6 @@ class Tui(controller: Controller) extends Observer{
       case "q" =>
       case "h" => println(helpBoard())
       case _ =>
-        println("I'm in")
         controller.gameStatus match {
           case GameStatus.GPONE =>
             val verifiedInput = MaybeInput(Some(input))
