@@ -131,6 +131,15 @@ class TuiSpec extends AnyWordSpec with Matchers{
           "Press 'n' for new Game\nPress 'h' for help\nPress 'q' to quit\n"
       tui.welcomeScreen() should be(welcomeScreen)
     }
+    "should provide an endscreen" in {
+      val endScreen =
+        "                         ***************************************\n" +
+        "                            Congratulations PlayerOne!\n" +
+        "                            you won the game\n" +
+        "                            Press q to quit or n for new Game\n" +
+        "                         ***************************************"
+        tui.endGameScreen(controller.players(0)) should be(endScreen)
+    }
     "should provide a goodbye screen" in {
       val goodbyeScreen =
         "**********************************************************************************************\n" +

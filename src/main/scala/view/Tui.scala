@@ -259,9 +259,9 @@ class Tui(controller: Controller) extends Observer{
     controller.gameStatus = GameStatus.END
     val endString = {
        "                         ***************************************\n" +
-      s"                         *  Congratulations ${player.name}     *\n!" +
-       "                         *  you won the game\n                 *" +
-       "                         *  Press q to quit or n for new Game  *\n" +
+      s"                            Congratulations ${player.name}!\n" +
+       "                            you won the game\n" +
+       "                            Press q to quit or n for new Game\n" +
        "                         ***************************************"
     }
 
