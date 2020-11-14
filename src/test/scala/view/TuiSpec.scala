@@ -1,6 +1,6 @@
 package view
 
-import controller.Controller
+import controller.{Controller, GameStatus}
 import model.{Board, MaybeInput, Player, Stone}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -106,6 +106,10 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should provide a Game-Phase-Two phrase" in {
       val gpTwo = "Game Phase Two: Move your Stones strategically and get the victory."
       tui.gamePhaseTwoBegin() should be(gpTwo)
+    }
+    "should provide a Game-Phase-Three phrase" in {
+      val gpThree = "Game Phase Three: Be aware! One Player is able to jump."
+      tui.gamePhaseThreeBegin() should be(gpThree)
     }
     "should provide a warning if wrong coordinates were used" in {
       val warningMsg = "Invalid coordinates entered.\nPlease select another free coordinates."
