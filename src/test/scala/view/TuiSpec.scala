@@ -74,7 +74,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
 
     "should handle a valid input in GPTHREE" in {
       controller.create_empty_Board()
-      controller.gameStatus = GameStatus.GPTWO
+      controller.gameStatus = GameStatus.GPTHREE
       tui.currentPlayer = controller.players(0)
       controller.setStone(0, 0, 2)
 
@@ -86,7 +86,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
       controller.board.stone(0, 1) should be(Stone(2))
     }
     "should handle an invalid input in GPTHREE" in {
-      controller.gameStatus = GameStatus.GPTWO
+      controller.gameStatus = GameStatus.GPTHREE
       tui.gpTwoSeparator = false
       tui.processGameInputLine("Invalid")
 
