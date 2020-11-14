@@ -28,7 +28,6 @@ class Tui(controller: Controller) extends Observer{
     currentPlayer.color match {
       case 1 => players(1)
       case 2 => players(0)
-      case _ => players(0)
     }
   }
 
@@ -87,7 +86,6 @@ class Tui(controller: Controller) extends Observer{
                     controller.moveStone(list(0), list(1), currentPlayer.color)
                     gpTwoList = new ListBuffer[(Int, Int)]
                     gpTwoSeparator = !gpTwoSeparator
-                  case _ =>
                 }
               }
               else println("Invalid")
