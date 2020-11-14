@@ -48,7 +48,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should handle an invalid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE
-      tui.currentPlayer = controller.players(0)
       tui.processGameInputLine("Invalid")
     }
     "should handle a valid input in GPTWO" in {
@@ -66,15 +65,16 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should handle an invalid input in GPTWO" in {
       controller.gameStatus = GameStatus.GPTWO
-      tui.currentPlayer = controller.players(0)
       tui.processGameInputLine("Invalid")
     }
 
     "should handle a valid input in GPTHREE" in {
-
+      controller.gameStatus = GameStatus.GPTHREE
+      tui.processGameInputLine("11")
     }
     "should handle an invalid input in GPTHREE" in {
-
+      controller.gameStatus = GameStatus.GPTHREE
+      tui.processGameInputLine("Invalid")
     }
 
     "should provide a welcome screen" in {
@@ -167,9 +167,9 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should provide a dialog in GPTWO for player interaction" in {
       tui.currentPlayer = controller.players(0)
       tui.gpTwoSeparator = false
-      tui.playerGamePhaseTwoTurns() should be("PlayerOne choose the stone you want to move:")
+      tui.mainGamePhaseTurns() should be("PlayerOne choose the stone you want to move:")
       tui.gpTwoSeparator = true
-      tui.playerGamePhaseTwoTurns() should be("PlayerOne where do you want to place it:")
+      tui.mainGamePhaseTurns() should be("PlayerOne where do you want to place it:")
     }
     "should provide the current gamescore (amount of stones)" in {
       tui.currentGameScore() should be("                                         9 vs. 9\n")

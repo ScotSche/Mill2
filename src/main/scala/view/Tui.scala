@@ -66,7 +66,7 @@ class Tui(controller: Controller) extends Observer{
                   case Some(data: List[Int]) =>
                     gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
                     gpTwoSeparator = !gpTwoSeparator
-                    println(playerGamePhaseTwoTurns())
+                    println(mainGamePhaseTurns())
                 }
               }
               else println("Invalid")
@@ -150,18 +150,11 @@ class Tui(controller: Controller) extends Observer{
       s"(${controller.amountOfPlayerStones(currentPlayer.color) + 1} of ${currentPlayer.MAX_STONE}):"
     playerTurnString
   }
-  def playerGamePhaseTwoTurns(): String ={
+  def mainGamePhaseTurns(): String ={
     if( !gpTwoSeparator)
       s"${currentPlayer.name} choose the stone you want to move:"
     else
       s"${currentPlayer.name} where do you want to place it:"
-  }
-  def playerGamePhaseThreeTurns(): String ={
-    val str = ""
-
-    //s"\n${currentPlayer.name} where do you want to place it:"
-    //s"\n${currentPlayer.name} choose the stone you want to move:"
-    str
   }
 
   def currentGameScore(): String ={
@@ -274,15 +267,15 @@ class Tui(controller: Controller) extends Observer{
         if (controller.amountOfPlayerStones(1) == controller.players(0).MAX_STONE &&
           controller.amountOfPlayerStones(2) == controller.players(1).MAX_STONE) {
           println(gamePhaseTwoBegin())
-          println(playerGamePhaseTwoTurns())
+          println(mainGamePhaseTurns())
         }
         else println(playerGamePhaseOneTurns())
 
       case GameStatus.GPTWO =>
         if(controller.players(0).MAX_STONE == 3 || controller.players(1).MAX_STONE == 3) {
           println(gamePhaseThreeBegin())
-          println(playerGamePhaseThreeTurns())
-        } else println(playerGamePhaseTwoTurns())
+          println(mainGamePhaseTurns())
+        } else println(mainGamePhaseTurns())
 
       case GameStatus.GPTHREE =>
       case _ =>
