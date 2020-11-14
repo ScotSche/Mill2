@@ -92,6 +92,42 @@ class Tui(controller: Controller) extends Observer{
             }
 
           case GameStatus.GPTHREE =>
+            if (!gpTwoSeparator) {
+              val verifiedInput = MaybeInput(Some(input))
+                .validLength
+                .validInt
+                .validCoordinates
+                .checkStone(controller.board, currentPlayer.color)
+                .input
+              if (verifiedInput.isDefined) {
+                verifiedInput match {
+                  case Some(data: List[Int]) =>
+                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                    gpTwoSeparator = !gpTwoSeparator
+                    println(mainGamePhaseTurns())
+                }
+              }
+              else println("Invalid")
+            }
+            else {
+              val verifiedInput = MaybeInput(Some(input))
+                .validLength
+                .validInt
+                .validCoordinates
+                .validateStone(controller.board)
+                .input
+              if (verifiedInput.isDefined) {
+                verifiedInput match {
+                  case Some(data: List[Int]) =>
+                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                    val list = gpTwoList.toList
+                    controller.moveStone(list(0), list(1), currentPlayer.color)
+                    gpTwoList = new ListBuffer[(Int, Int)]
+                    gpTwoSeparator = !gpTwoSeparator
+                }
+              }
+              else println("Invalid")
+            }
         }
     }
   }
@@ -219,6 +255,19 @@ class Tui(controller: Controller) extends Observer{
     helpString
   }
 
+  def endGameScreen(player: Player): String = {
+    controller.gameStatus = GameStatus.END
+    val endString = {
+       "                         ***************************************\n" +
+      s"                         *  Congratulations ${player.name}     *\n!" +
+       "                         *  you won the game\n                 *" +
+       "                         *  Press q to quit or n for new Game  *\n" +
+       "                         ***************************************"
+    }
+
+    endString
+  }
+
   def goodbyeScreen(): String ={
     val goodbyeString = "**********************************************************************************************\n" +
       "*                                  THANK YOU FOR PLAYING                                     *\n"   +
@@ -278,6 +327,12 @@ class Tui(controller: Controller) extends Observer{
         } else println(mainGamePhaseTurns())
 
       case GameStatus.GPTHREE =>
+        if(controller.players(0).MAX_STONE == 2){
+          println(endGameScreen(controller.players(1)))
+        }
+        else if(controller.players(1).MAX_STONE == 2){
+          println(endGameScreen(controller.players(0)))
+        }
     }
   }
 }
