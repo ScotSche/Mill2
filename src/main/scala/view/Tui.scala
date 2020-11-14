@@ -319,7 +319,7 @@ class Tui(controller: Controller) extends Observer{
     }
   }
 
-  def waitForPlayerToRemoveStone(): Unit ={
+  /*def waitForPlayerToRemoveStone(): Unit ={
     val input = readLine()
     val result = MaybeInput(Some(input)).validLength.validInt.validCoordinates.checkCompStone(controller.board, controller, currentPlayer.color).input
     if (result.isDefined) {
@@ -331,8 +331,7 @@ class Tui(controller: Controller) extends Observer{
       println("Invalid")
       waitForPlayerToRemoveStone()
     }
-
-  }
+  }*/
 
   override def updatePlayer: Unit = {
     if ( !newMill) {
