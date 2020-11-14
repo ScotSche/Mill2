@@ -65,6 +65,10 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should handle an invalid input in GPTWO" in {
       controller.gameStatus = GameStatus.GPTWO
+      tui.gpTwoSeparator = false
+      tui.processGameInputLine("Invalid")
+
+      tui.gpTwoSeparator = true
       tui.processGameInputLine("Invalid")
     }
 
