@@ -76,7 +76,29 @@ class TuiSpec extends AnyWordSpec with Matchers{
       controller.gameStatus = GameStatus.GPTHREE
       tui.processGameInputLine("Invalid")
     }
-
+    "should change from GPONE to GPTWO" in {
+      controller.gameStatus = GameStatus.GPONE
+      controller.create_empty_Board()
+      controller.setStone(0, 0, 1)
+      controller.setStone(0, 1, 2)
+      controller.setStone(0, 2, 1)
+      controller.setStone(0, 3, 2)
+      controller.setStone(0, 4, 1)
+      controller.setStone(0, 5, 2)
+      controller.setStone(0, 6, 1)
+      controller.setStone(0, 7, 2)
+      controller.setStone(1, 0, 1)
+      controller.setStone(1, 1, 2)
+      controller.setStone(1, 2, 1)
+      controller.setStone(1, 3, 2)
+      controller.setStone(1, 4, 1)
+      controller.setStone(1, 5, 2)
+      controller.setStone(1, 6, 1)
+      controller.setStone(1, 7, 2)
+      controller.setStone(2, 0, 1)
+      controller.setStone(2, 2, 2)
+      controller.gameStatus should be(GameStatus.GPTWO)
+    }
     "should provide a welcome screen" in {
       val welcomeScreen =
         "**********************************************************************************************\n" +
@@ -247,6 +269,12 @@ class TuiSpec extends AnyWordSpec with Matchers{
       val result = MaybeInput(Some("21")).validLength.validInt.validCoordinates.checkCompStone(board4, controller, 1).input
       result.isDefined should be(true)
 
+    }
+    "should change from GPTWO to GPTHREE" in {
+      controller.players(0).MAX_STONE = 3
+      controller.create_empty_Board()
+      controller.setStone(0, 0, 2)
+      controller.gameStatus should be(GameStatus.GPTHREE)
     }
   }
 }
