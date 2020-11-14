@@ -39,7 +39,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should handle a valid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE
-      tui.currentPlayer = controller.players(0)
+      controller.create_empty_Board()
       tui.processGameInputLine("11")
       controller.board.stone(0, 0) should be(Stone(1))
 
