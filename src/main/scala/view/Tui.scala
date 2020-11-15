@@ -39,7 +39,7 @@ class Tui(controller: Controller) extends Observer{
       case _ =>
         controller.gameStatus match {
           case GameStatus.GPONE =>
-            if( !newMill) {
+            if (!newMill) {
               val verifiedInput = MaybeInput(Some(input))
                 .validLength
                 .validInt
@@ -55,7 +55,7 @@ class Tui(controller: Controller) extends Observer{
               }
               else println("Invalid")
             }
-            else{
+            else {
               val verifiedInput = MaybeInput(Some(input))
                 .validLength
                 .validInt
@@ -79,76 +79,124 @@ class Tui(controller: Controller) extends Observer{
             }
 
           case GameStatus.GPTWO =>
-            if (!gpTwoSeparator) {
-              val verifiedInput = MaybeInput(Some(input))
-                .validLength
-                .validInt
-                .validCoordinates
-                .checkStone(controller.board, currentPlayer.color)
-                .input
-              if (verifiedInput.isDefined) {
-                verifiedInput match {
-                  case Some(data: List[Int]) =>
-                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
-                    gpTwoSeparator = !gpTwoSeparator
-                    println(mainGamePhaseTurns())
+            if (!newMill) {
+              if (!gpTwoSeparator) {
+                val verifiedInput = MaybeInput(Some(input))
+                  .validLength
+                  .validInt
+                  .validCoordinates
+                  .checkStone(controller.board, currentPlayer.color)
+                  .input
+                if (verifiedInput.isDefined) {
+                  verifiedInput match {
+                    case Some(data: List[Int]) =>
+                      gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                      gpTwoSeparator = !gpTwoSeparator
+                      println(mainGamePhaseTurns())
+                  }
                 }
+                else println("Invalid")
               }
-              else println("Invalid")
+              else {
+                val verifiedInput = MaybeInput(Some(input))
+                  .validLength
+                  .validInt
+                  .validCoordinates
+                  .validateStone(controller.board)
+                  .input
+                if (verifiedInput.isDefined) {
+                  verifiedInput match {
+                    case Some(data: List[Int]) =>
+                      gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                      val list = gpTwoList.toList
+                      controller.moveStone(list(0), list(1), currentPlayer.color)
+                      gpTwoList = new ListBuffer[(Int, Int)]
+                      gpTwoSeparator = !gpTwoSeparator
+                  }
+                }
+                else println("Invalid")
+              }
             }
             else {
               val verifiedInput = MaybeInput(Some(input))
                 .validLength
                 .validInt
                 .validCoordinates
-                .validateStone(controller.board)
+                .checkStone(controller.board, {
+                  val optionPlayer = controller.players.find(_ != currentPlayer)
+                  optionPlayer match {
+                    case Some(player: Player) => player.color
+                  }
+                })
                 .input
+
               if (verifiedInput.isDefined) {
                 verifiedInput match {
                   case Some(data: List[Int]) =>
-                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
-                    val list = gpTwoList.toList
-                    controller.moveStone(list(0), list(1), currentPlayer.color)
-                    gpTwoList = new ListBuffer[(Int, Int)]
-                    gpTwoSeparator = !gpTwoSeparator
+                    newMill = !newMill
+                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
                 }
               }
               else println("Invalid")
             }
 
           case GameStatus.GPTHREE =>
-            if (!gpTwoSeparator) {
-              val verifiedInput = MaybeInput(Some(input))
-                .validLength
-                .validInt
-                .validCoordinates
-                .checkStone(controller.board, currentPlayer.color)
-                .input
-              if (verifiedInput.isDefined) {
-                verifiedInput match {
-                  case Some(data: List[Int]) =>
-                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
-                    gpTwoSeparator = !gpTwoSeparator
-                    println(mainGamePhaseTurns())
+            if (!newMill) {
+              if (!gpTwoSeparator) {
+                val verifiedInput = MaybeInput(Some(input))
+                  .validLength
+                  .validInt
+                  .validCoordinates
+                  .checkStone(controller.board, currentPlayer.color)
+                  .input
+                if (verifiedInput.isDefined) {
+                  verifiedInput match {
+                    case Some(data: List[Int]) =>
+                      gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                      gpTwoSeparator = !gpTwoSeparator
+                      println(mainGamePhaseTurns())
+                  }
                 }
+                else println("Invalid")
               }
-              else println("Invalid")
+              else {
+                val verifiedInput = MaybeInput(Some(input))
+                  .validLength
+                  .validInt
+                  .validCoordinates
+                  .validateStone(controller.board)
+                  .input
+                if (verifiedInput.isDefined) {
+                  verifiedInput match {
+                    case Some(data: List[Int]) =>
+                      gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
+                      val list = gpTwoList.toList
+                      controller.moveStone(list(0), list(1), currentPlayer.color)
+                      gpTwoList = new ListBuffer[(Int, Int)]
+                      gpTwoSeparator = !gpTwoSeparator
+                  }
+                }
+                else println("Invalid")
+              }
             }
-            else {
+            else{
               val verifiedInput = MaybeInput(Some(input))
                 .validLength
                 .validInt
                 .validCoordinates
-                .validateStone(controller.board)
+                .checkStone(controller.board, {
+                  val optionPlayer = controller.players.find(_ != currentPlayer)
+                  optionPlayer match {
+                    case Some(player: Player) => player.color
+                  }
+                })
                 .input
+
               if (verifiedInput.isDefined) {
                 verifiedInput match {
                   case Some(data: List[Int]) =>
-                    gpTwoList += Tuple2(data(0) - 1, data(1) - 1)
-                    val list = gpTwoList.toList
-                    controller.moveStone(list(0), list(1), currentPlayer.color)
-                    gpTwoList = new ListBuffer[(Int, Int)]
-                    gpTwoSeparator = !gpTwoSeparator
+                    newMill = !newMill
+                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
                 }
               }
               else println("Invalid")
