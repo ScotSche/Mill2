@@ -55,28 +55,7 @@ class Tui(controller: Controller) extends Observer{
               }
               else println("Invalid")
             }
-            else {
-              val verifiedInput = MaybeInput(Some(input))
-                .validLength
-                .validInt
-                .validCoordinates
-                .checkStone(controller.board, {
-                  val optionPlayer = controller.players.find(_ != currentPlayer)
-                  optionPlayer match {
-                    case Some(player: Player) => player.color
-                  }
-                })
-                .input
-
-              if (verifiedInput.isDefined) {
-                verifiedInput match {
-                  case Some(data: List[Int]) =>
-                    newMill = !newMill
-                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
-                }
-              }
-              else println("Invalid")
-            }
+            else{ handleMillInputString(input) }
 
           case GameStatus.GPTWO =>
             if (!newMill) {
@@ -117,28 +96,7 @@ class Tui(controller: Controller) extends Observer{
                 else println("Invalid")
               }
             }
-            else {
-              val verifiedInput = MaybeInput(Some(input))
-                .validLength
-                .validInt
-                .validCoordinates
-                .checkStone(controller.board, {
-                  val optionPlayer = controller.players.find(_ != currentPlayer)
-                  optionPlayer match {
-                    case Some(player: Player) => player.color
-                  }
-                })
-                .input
-
-              if (verifiedInput.isDefined) {
-                verifiedInput match {
-                  case Some(data: List[Int]) =>
-                    newMill = !newMill
-                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
-                }
-              }
-              else println("Invalid")
-            }
+            else{ handleMillInputString(input) }
 
           case GameStatus.GPTHREE =>
             if (!newMill) {
@@ -179,31 +137,33 @@ class Tui(controller: Controller) extends Observer{
                 else println("Invalid")
               }
             }
-            else{
-              val verifiedInput = MaybeInput(Some(input))
-                .validLength
-                .validInt
-                .validCoordinates
-                .checkStone(controller.board, {
-                  val optionPlayer = controller.players.find(_ != currentPlayer)
-                  optionPlayer match {
-                    case Some(player: Player) => player.color
-                  }
-                })
-                .input
-
-              if (verifiedInput.isDefined) {
-                verifiedInput match {
-                  case Some(data: List[Int]) =>
-                    newMill = !newMill
-                    controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
-                }
-              }
-              else println("Invalid")
-            }
+            else{ handleMillInputString(input) }
         }
     }
   }
+  def handleMillInputString(input: String) = {
+    val verifiedInput = MaybeInput(Some(input))
+      .validLength
+      .validInt
+      .validCoordinates
+      .checkStone(controller.board, {
+        val optionPlayer = controller.players.find(_ != currentPlayer)
+        optionPlayer match {
+          case Some(player: Player) => player.color
+        }
+      })
+      .input
+
+    if (verifiedInput.isDefined) {
+      verifiedInput match {
+        case Some(data: List[Int]) =>
+          newMill = !newMill
+          controller.remove_stone((data.head - 1), (data(1) - 1), currentPlayer.color)
+      }
+    }
+    else println("Invalid")
+  }
+
   def welcomeScreen(): String ={
     val welcomeString = "**********************************************************************************************\n" +
       "*                                       WELCOME TO                                           *\n"   +
