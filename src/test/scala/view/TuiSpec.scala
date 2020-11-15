@@ -50,6 +50,18 @@ class TuiSpec extends AnyWordSpec with Matchers{
       controller.gameStatus = GameStatus.GPONE
       tui.processGameInputLine("Invalid")
     }
+    "should handle a valid mill input in GPONE" in {
+      controller.create_empty_Board()
+      tui.processGameInputLine("11")
+      tui.processGameInputLine("12")
+      tui.processGameInputLine("18")
+      tui.processGameInputLine("13")
+      tui.processGameInputLine("17")
+
+      tui.processGameInputLine("12")
+      controller.board.check_stone_Set(0, 1) should be(false)
+    }
+
     "should handle a valid input in GPTWO" in {
       controller.create_empty_Board()
       controller.gameStatus = GameStatus.GPTWO
@@ -220,6 +232,8 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.mainGamePhaseTurns() should be("PlayerOne where do you want to place it:")
     }
     "should provide the current gamescore (amount of stones)" in {
+      controller.players(0).MAX_STONE = 9
+      controller.players(1).MAX_STONE = 9
       tui.currentGameScore() should be("                                         9 vs. 9\n")
     }
     "should update the board with new stones" in {
