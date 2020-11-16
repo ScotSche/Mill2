@@ -178,14 +178,6 @@ class Tui(controller: Controller) extends Observer{
     gpThreeString
   }
 
-  def stoneWarning(): String = """
-    Stone location already used.
-    Please select another free coordinates. """
-
-  def coordinationWarning(): String = """
-    Invalid coordinates entered.
-    Please select another free coordinates. """
-
   def playerGamePhaseOneTurns(): String ={
     val playerTurnString = s"\n${currentPlayer.name} it is your turn Place one stone on a specific coordinate " + "" +
       s"(${controller.amountOfPlayerStones(currentPlayer.color) + 1} of ${currentPlayer.MAX_STONE}):"
