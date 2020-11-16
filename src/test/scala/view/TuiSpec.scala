@@ -1,7 +1,7 @@
 package view
 
 import controller.{Controller, GameStatus}
-import model.{Board, MaybeInput, Player, Stone}
+import model.{Board, Player, Stone}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -12,11 +12,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
     val controller = new Controller(new Board, Vector())
     controller.create_new_Players("PlayerOne", "PlayerTwo")
     val tui = new Tui(controller)
-    val board = new Board
-    val board1= board.update_board(1, 1,1)
-    val board2= board1.update_board(1,0,2)
-    val board3= board2.update_board(1, 2,1)
-    val board4= board3.update_board(1, 3,1)
     "create a new board on input 'n'" in{
       tui.processInputLine("n")
       controller.board should be(new Board)
@@ -247,7 +242,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should provide a message to show which player is playing with the amount of stones played" in {
       controller.create_empty_Board()
-      tui.currentPlayer = new Player("Your Name", 1, 9)
+      tui.currentPlayer = Player("Your Name", 1, 9)
       val playerMsg = "\nYour Name it is your turn Place one stone on a specific coordinate (1 of 9):"
       tui.playerGamePhaseOneTurns() should be(playerMsg)
     }
