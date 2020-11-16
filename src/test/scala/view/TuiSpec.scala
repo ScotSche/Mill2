@@ -31,12 +31,14 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processInputLine("*")
     }
 
+
     "should do nothing and leave loop in input 'q' in game mode" in {
       tui.processGameInputLine("q")
     }
     "should print the help board on input 'h' in game mode" in {
       tui.processGameInputLine("h")
     }
+
     "should handle a valid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE
       controller.create_empty_Board()
@@ -51,51 +53,70 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("Invalid")
     }
     "should handle a valid mill input in GPONE" in {
-      controller.create_empty_Board()
-      tui.processGameInputLine("11")
-      tui.processGameInputLine("12")
       tui.processGameInputLine("18")
       tui.processGameInputLine("13")
       tui.processGameInputLine("17")
-
+      tui.newMill should be(true)
       tui.processGameInputLine("12")
       controller.board.check_stone_Set(0, 1) should be(false)
     }
+    "should change from GPONE to GPTWO" in {
+      tui.processGameInputLine("12")
+      tui.processGameInputLine("14")
+      tui.processGameInputLine("15")
+      tui.processGameInputLine("16")
+      tui.processGameInputLine("21")
+      tui.processGameInputLine("22")
+      tui.processGameInputLine("23")
+      tui.processGameInputLine("24")
+      tui.processGameInputLine("25")
+      tui.processGameInputLine("26")
+      tui.processGameInputLine("27")
+      tui.processGameInputLine("28")
+      tui.processGameInputLine("31")
+
+      controller.gameStatus should be(GameStatus.GPTWO)
+    }
 
     "should handle a valid input in GPTWO" in {
-      controller.create_empty_Board()
-      controller.gameStatus = GameStatus.GPTWO
-      tui.currentPlayer = controller.players(0)
-      controller.setStone(0, 0, 2)
-
-      tui.gpTwoSeparator = false
       tui.processGameInputLine("11")
-      tui.processGameInputLine("12")
+      tui.processGameInputLine("32")
 
       controller.board.stone(0, 0) should be(Stone(0))
-      controller.board.stone(0, 1) should be(Stone(2))
+      controller.board.stone(2, 1) should be(Stone(1))
     }
     "should handle an invalid input in GPTWO" in {
-      controller.gameStatus = GameStatus.GPTWO
       tui.gpTwoSeparator = false
       tui.processGameInputLine("Invalid")
 
       tui.gpTwoSeparator = true
       tui.processGameInputLine("Invalid")
+      tui.gpTwoSeparator = false
+    }
+    "should handle a valid mill input in GPTWO" in {
+      // Player Two Stone move
+      tui.processGameInputLine("12")
+      tui.processGameInputLine("33")
+      // Player One Stone move
+      tui.processGameInputLine("32")
+      tui.processGameInputLine("11")
+
+      tui.newMill should be(true)
+      // Player One Remove Competitor Stone
+      tui.processGameInputLine("33")
+    }
+    "should change from GPTWO to GPTHREE" in {
+      controller.players(0).MAX_STONE = 3
+      controller.notifyPlayerObserver
+      controller.gameStatus should be(GameStatus.GPTHREE)
     }
 
     "should handle a valid input in GPTHREE" in {
-      controller.create_empty_Board()
-      controller.gameStatus = GameStatus.GPTHREE
-      tui.currentPlayer = controller.players(0)
-      controller.setStone(0, 0, 2)
-
-      tui.gpTwoSeparator = false
-      tui.processGameInputLine("11")
+      tui.processGameInputLine("14")
       tui.processGameInputLine("12")
 
-      controller.board.stone(0, 0) should be(Stone(0))
-      controller.board.stone(0, 1) should be(Stone(2))
+      controller.board.stone(0, 3) should be(Stone(0))
+      controller.board.stone(0, 1) should be(Stone(1))
     }
     "should handle an invalid input in GPTHREE" in {
       controller.gameStatus = GameStatus.GPTHREE
@@ -104,30 +125,34 @@ class TuiSpec extends AnyWordSpec with Matchers{
 
       tui.gpTwoSeparator = true
       tui.processGameInputLine("Invalid")
+      tui.gpTwoSeparator = false
     }
-    "should change from GPONE to GPTWO" in {
-      controller.gameStatus = GameStatus.GPONE
-      controller.create_empty_Board()
-      controller.setStone(0, 0, 1)
-      controller.setStone(0, 1, 2)
-      controller.setStone(0, 2, 1)
-      controller.setStone(0, 3, 2)
-      controller.setStone(0, 4, 1)
-      controller.setStone(0, 5, 2)
-      controller.setStone(0, 6, 1)
-      controller.setStone(0, 7, 2)
-      controller.setStone(1, 0, 1)
-      controller.setStone(1, 1, 2)
-      controller.setStone(1, 2, 1)
-      controller.setStone(1, 3, 2)
-      controller.setStone(1, 4, 1)
-      controller.setStone(1, 5, 2)
-      controller.setStone(1, 6, 1)
-      controller.setStone(1, 7, 2)
-      controller.setStone(2, 0, 1)
-      controller.setStone(2, 2, 2)
-      controller.gameStatus should be(GameStatus.GPTWO)
+    "should handle a valid mill input in GPTHREE" in {
+      println(tui.currentPlayer)
+      // Player Two Stone move
+      tui.processGameInputLine("15")
+      tui.processGameInputLine("33")
+      // Player One Stone move
+      tui.processGameInputLine("11")
+      tui.processGameInputLine("32")
+
+      tui.newMill should be(true)
+      // Player One Remove Competitor Stone
+      tui.processGameInputLine("33")
     }
+
+    "should change from GPTHREE to END" in {
+      controller.players(0).MAX_STONE = 2
+      controller.notifyPlayerObserver
+      controller.gameStatus should be(GameStatus.END)
+
+      controller.players(0).MAX_STONE = 9
+      controller.players(1).MAX_STONE = 2
+      controller.gameStatus = GameStatus.GPTHREE
+      controller.notifyPlayerObserver
+      controller.gameStatus should be(GameStatus.END)
+    }
+
     "should provide a welcome screen" in {
       val welcomeScreen =
         "**********************************************************************************************\n" +
@@ -304,30 +329,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.updateBoard(emptyBoard) should be(emptyBoardString)
       tui.updateBoard(filledPlayerOneBoard) should be(filledPlayerOneBoardString)
       tui.updateBoard(filledPlayerTwoBoard) should be(filledPlayerTwoBoardString)
-    }
-    "wait for a valid input" in{
-      val result = MaybeInput(Some("21")).validLength.validInt.validCoordinates.checkCompStone(board4, controller, 1).input
-      result.isDefined should be(true)
-
-    }
-    "should change from GPTWO to GPTHREE" in {
-      controller.gameStatus = GameStatus.GPTWO
-      controller.players(0).MAX_STONE = 3
-      controller.notifyPlayerObserver
-      controller.gameStatus should be(GameStatus.GPTHREE)
-    }
-    "should change from GPTHREE to END" in {
-      controller.gameStatus = GameStatus.GPTHREE
-      controller.players(0).MAX_STONE = 2
-      controller.notifyPlayerObserver
-      controller.gameStatus should be(GameStatus.END)
-
-      controller.players(0).MAX_STONE = 9
-      controller.players(1).MAX_STONE = 2
-      controller.gameStatus = GameStatus.GPTHREE
-      controller.notifyPlayerObserver
-      controller.gameStatus should be(GameStatus.END)
-
     }
   }
 }
