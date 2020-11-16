@@ -3,9 +3,7 @@ package view
 import controller.{Controller, GameStatus}
 import model.{Board, MaybeInput, Player, Stone}
 import util.Observer
-
 import scala.collection.mutable.ListBuffer
-import scala.io.StdIn.readLine
 
 class Tui(controller: Controller) extends Observer{
   controller.add(this)
@@ -162,29 +160,25 @@ class Tui(controller: Controller) extends Observer{
     else println("Invalid")
   }
 
-  def welcomeScreen(): String ={
-    val welcomeString = "**********************************************************************************************\n" +
-      "*                                       WELCOME TO                                           *\n"   +
-      "*  __________   __     __   ________      _____      ______    __    __           __         *\n"   +
-      "* |___    ___| |  |   |  | |   _____|    |   _  \\   /  _   |  |  |  |  |         |  |        *\n"  +
-      "*     |  |     |  |___|  | |  |_____     |  | \\  \\_/  / |  |  |  |  |  |         |  |        *\n" +
-      "*     |  |     |   ___   | |  ______|    |  |  \\_____/  |  |  |  |  |  |         |  |        *\n"  +
-      "*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *\n"   +
-      "*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *\n"   +
-      "*                                        IN SCALA                                            *\n"   +
-      "**********************************************************************************************\n"   +
-      "Press 'n' for new Game\nPress 'h' for help\nPress 'q' to quit\n"
-    welcomeString
-  }
+  def welcomeScreen(): String = """
+    :**********************************************************************************************
+    :*                                       WELCOME TO                                           *
+    :*  __________   __     __   ________      _____      ______    __    __           __         *
+    :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+    :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+    :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+    :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+    :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+    :*                                        IN SCALA                                            *
+    :**********************************************************************************************
+    :Press 'n' for new Game
+    :Press 'h' for help
+    :Press 'q' to quit """.stripMargin(':')
 
-  def playerOneName(): String ={
-    val playerString = "Please enter name of player one: "
-    playerString
-  }
-  def playerTwoName(): String ={
-    val playerString = "Please enter name of player two: "
-    playerString
-  }
+  def playerOneName(): String = """
+    |Please enter name of player one: """.stripMargin
+  def playerTwoName(): String = """
+    |Please enter name of player two: """.stripMargin
 
   def gamePhaseOneBegin(): String = {
     controller.gameStatus = GameStatus.GPONE
@@ -203,14 +197,13 @@ class Tui(controller: Controller) extends Observer{
     gpThreeString
   }
 
-  def stoneWarning(): String = {
-    val warningString = "Stone location already used.\nPlease select another free coordinates."
-    warningString
-  }
-  def coordinationWarning(): String = {
-    val warningString = "Invalid coordinates entered.\nPlease select another free coordinates."
-    warningString
-  }
+  def stoneWarning(): String = """
+    Stone location already used.
+    Please select another free coordinates. """
+
+  def coordinationWarning(): String = """
+    Invalid coordinates entered.
+    Please select another free coordinates. """
 
   def playerGamePhaseOneTurns(): String ={
     val playerTurnString = s"\n${currentPlayer.name} it is your turn Place one stone on a specific coordinate " + "" +
@@ -262,29 +255,27 @@ class Tui(controller: Controller) extends Observer{
       s"               ${uiBoard(0)(6)}----------------------------${uiBoard(0)(5)}----------------------------${uiBoard(0)(4)}\n"
     updateString
   }
-  def helpBoard(): String ={
-    val helpString = "To access the Nodes see the following coordinates:\n" +
-      "               O----------------------------O----------------------------O\n" +
-      "               | (11)                       | (12)                  (13) |\n" +
-      "               |                            |                            |\n" +
-      "               |          O-----------------O-----------------O          |\n" +
-      "               |          | (21)            | (22)       (23) |          |\n" +
-      "               |          |            (32) |                 |          |\n" +
-      "               |          |         O-------O-------O         |          |\n" +
-      "               |          |         | (31)     (33) |         |          |\n" +
-      "               |          |         |               |         |          |\n" +
-      "               O----------O---------O (38)     (34) O---------O----------O\n" +
-      "               | (18)     | (28)    |               |    (24) |     (14) |\n" +
-      "               |          |         | (37)     (35) |         |          |\n" +
-      "               |          |         O-------O-------O         |          |\n" +
-      "               |          |            (36) |                 |          |\n" +
-      "               |          | (27)            | (26)       (25) |          |\n" +
-      "               |          O-----------------O-----------------O          |\n" +
-      "               |                            |                            |\n" +
-      "               | (17)                       | (16)                  (15) |\n" +
-      "               O----------------------------O----------------------------O\n"
-    helpString
-  }
+  def helpBoard(): String = """
+    :To access the Nodes see the following coordinates:
+    :               O----------------------------O----------------------------O
+    :               | (11)                       | (12)                  (13) |
+    :               |                            |                            |
+    :               |          O-----------------O-----------------O          |
+    :               |          | (21)            | (22)       (23) |          |
+    :               |          |            (32) |                 |          |
+    :               |          |         O-------O-------O         |          |
+    :               |          |         | (31)     (33) |         |          |
+    :               |          |         |               |         |          |
+    :               O----------O---------O (38)     (34) O---------O----------O
+    :               | (18)     | (28)    |               |    (24) |     (14) |
+    :               |          |         | (37)     (35) |         |          |
+    :               |          |         O-------O-------O         |          |
+    :               |          |            (36) |                 |          |
+    :               |          | (27)            | (26)       (25) |          |
+    :               |          O-----------------O-----------------O          |
+    :               |                            |                            |
+    :               | (17)                       | (16)                  (15) |
+    :               O----------------------------O----------------------------O """.stripMargin(':')
 
   def endGameScreen(player: Player): String = {
     controller.gameStatus = GameStatus.END
@@ -299,19 +290,18 @@ class Tui(controller: Controller) extends Observer{
     endString
   }
 
-  def goodbyeScreen(): String ={
-    val goodbyeString = "**********************************************************************************************\n" +
-      "*                                  THANK YOU FOR PLAYING                                     *\n"   +
-      "*  __________   __     __   ________      _____      ______    __    __           __         *\n"   +
-      "* |___    ___| |  |   |  | |   _____|    |   _  \\   /  _   |  |  |  |  |         |  |        *\n"  +
-      "*     |  |     |  |___|  | |  |_____     |  | \\  \\_/  / |  |  |  |  |  |         |  |        *\n" +
-      "*     |  |     |   ___   | |  ______|    |  |  \\_____/  |  |  |  |  |  |         |  |        *\n"  +
-      "*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *\n"   +
-      "*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *\n"   +
-      "*                                        IN SCALA                                            *\n"   +
-      "**********************************************************************************************\n"
-    goodbyeString
-  }
+  def goodbyeScreen(): String = """
+    :**********************************************************************************************
+    :*                                  THANK YOU FOR PLAYING                                     *
+    :*  __________   __     __   ________      _____      ______    __    __           __         *
+    :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+    :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+    :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+    :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+    :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+    :*                                        IN SCALA                                            *
+    :********************************************************************************************** """.stripMargin(':')
+
   override def update: Unit = {
     if(controller.gameStatus == GameStatus.GPTWO) println(currentGameScore())
     println(updateBoard(controller.board))
@@ -324,20 +314,6 @@ class Tui(controller: Controller) extends Observer{
       newMill = !newMill
     }
   }
-
-  /*def waitForPlayerToRemoveStone(): Unit ={
-    val input = readLine()
-    val result = MaybeInput(Some(input)).validLength.validInt.validCoordinates.checkCompStone(controller.board, controller, currentPlayer.color).input
-    if (result.isDefined) {
-      result match {
-        case Some(data: List[Int]) => println(controller.remove_stone(data(0) - 1, data(1) - 1, currentPlayer.color))
-      }
-    }
-    else {
-      println("Invalid")
-      waitForPlayerToRemoveStone()
-    }
-  }*/
 
   override def updatePlayer: Unit = {
     if ( !newMill) {

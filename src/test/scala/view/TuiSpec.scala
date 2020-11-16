@@ -26,7 +26,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processInputLine("*")
     }
 
-
     "should do nothing and leave loop in input 'q' in game mode" in {
       tui.processGameInputLine("q")
     }
@@ -69,7 +68,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("27")
       tui.processGameInputLine("28")
       tui.processGameInputLine("31")
-
       controller.gameStatus should be(GameStatus.GPTWO)
     }
 
@@ -151,18 +149,20 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
 
     "should provide a welcome screen" in {
-      val welcomeScreen =
-        "**********************************************************************************************\n" +
-          "*                                       WELCOME TO                                           *\n"   +
-          "*  __________   __     __   ________      _____      ______    __    __           __         *\n"   +
-          "* |___    ___| |  |   |  | |   _____|    |   _  \\   /  _   |  |  |  |  |         |  |        *\n"  +
-          "*     |  |     |  |___|  | |  |_____     |  | \\  \\_/  / |  |  |  |  |  |         |  |        *\n" +
-          "*     |  |     |   ___   | |  ______|    |  |  \\_____/  |  |  |  |  |  |         |  |        *\n"  +
-          "*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *\n"   +
-          "*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *\n"   +
-          "*                                        IN SCALA                                            *\n"   +
-          "**********************************************************************************************\n"   +
-          "Press 'n' for new Game\nPress 'h' for help\nPress 'q' to quit\n"
+      val welcomeScreen = """
+        :**********************************************************************************************
+        :*                                       WELCOME TO                                           *
+        :*  __________   __     __   ________      _____      ______    __    __           __         *
+        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+        :*                                        IN SCALA                                            *
+        :**********************************************************************************************
+        :Press 'n' for new Game
+        :Press 'h' for help
+        :Press 'q' to quit """.stripMargin(':')
       tui.welcomeScreen() should be(welcomeScreen)
     }
     "should provide an endscreen" in {
@@ -175,49 +175,52 @@ class TuiSpec extends AnyWordSpec with Matchers{
         tui.endGameScreen(controller.players(0)) should be(endScreen)
     }
     "should provide a goodbye screen" in {
-      val goodbyeScreen =
-        "**********************************************************************************************\n" +
-          "*                                  THANK YOU FOR PLAYING                                     *\n"   +
-          "*  __________   __     __   ________      _____      ______    __    __           __         *\n"   +
-          "* |___    ___| |  |   |  | |   _____|    |   _  \\   /  _   |  |  |  |  |         |  |        *\n"  +
-          "*     |  |     |  |___|  | |  |_____     |  | \\  \\_/  / |  |  |  |  |  |         |  |        *\n" +
-          "*     |  |     |   ___   | |  ______|    |  |  \\_____/  |  |  |  |  |  |         |  |        *\n"  +
-          "*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *\n"   +
-          "*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *\n"   +
-          "*                                        IN SCALA                                            *\n"   +
-          "**********************************************************************************************\n"
+      val goodbyeScreen = """
+        :**********************************************************************************************
+        :*                                  THANK YOU FOR PLAYING                                     *
+        :*  __________   __     __   ________      _____      ______    __    __           __         *
+        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+        :*                                        IN SCALA                                            *
+        :********************************************************************************************** """.stripMargin(':')
       tui.goodbyeScreen() should be(goodbyeScreen)
     }
     "should provide a help board" in {
-      val helpBoard =
-        "To access the Nodes see the following coordinates:\n" +
-          "               O----------------------------O----------------------------O\n" +
-          "               | (11)                       | (12)                  (13) |\n" +
-          "               |                            |                            |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |          | (21)            | (22)       (23) |          |\n" +
-          "               |          |            (32) |                 |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |         | (31)     (33) |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               O----------O---------O (38)     (34) O---------O----------O\n" +
-          "               | (18)     | (28)    |               |    (24) |     (14) |\n" +
-          "               |          |         | (37)     (35) |         |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |            (36) |                 |          |\n" +
-          "               |          | (27)            | (26)       (25) |          |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |                            |                            |\n" +
-          "               | (17)                       | (16)                  (15) |\n" +
-          "               O----------------------------O----------------------------O\n"
+      val helpBoard = """
+        :To access the Nodes see the following coordinates:
+        :               O----------------------------O----------------------------O
+        :               | (11)                       | (12)                  (13) |
+        :               |                            |                            |
+        :               |          O-----------------O-----------------O          |
+        :               |          | (21)            | (22)       (23) |          |
+        :               |          |            (32) |                 |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |         | (31)     (33) |         |          |
+        :               |          |         |               |         |          |
+        :               O----------O---------O (38)     (34) O---------O----------O
+        :               | (18)     | (28)    |               |    (24) |     (14) |
+        :               |          |         | (37)     (35) |         |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |            (36) |                 |          |
+        :               |          | (27)            | (26)       (25) |          |
+        :               |          O-----------------O-----------------O          |
+        :               |                            |                            |
+        :               | (17)                       | (16)                  (15) |
+        :               O----------------------------O----------------------------O """.stripMargin(':')
       tui.helpBoard() should be(helpBoard)
     }
     "should provide a player one name input" in {
-      val playerOneInput = "Please enter name of player one: "
+      val playerOneInput =
+        """
+          |Please enter name of player one: """.stripMargin
       tui.playerOneName() should be(playerOneInput)
     }
     "should provide a player two name input" in {
-      val playerTwoInput = "Please enter name of player two: "
+      val playerTwoInput = """
+        |Please enter name of player two: """.stripMargin
       tui.playerTwoName() should be(playerTwoInput)
     }
     "should provide a Game-Phase-One phrase" in {
@@ -231,14 +234,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should provide a Game-Phase-Three phrase" in {
       val gpThree = "Game Phase Three: Be aware! One Player is able to jump."
       tui.gamePhaseThreeBegin() should be(gpThree)
-    }
-    "should provide a warning if wrong coordinates were used" in {
-      val warningMsg = "Invalid coordinates entered.\nPlease select another free coordinates."
-      tui.coordinationWarning() should be(warningMsg)
-    }
-    "should provide a warning if stone position is already used" in {
-      val warningMsg = "Stone location already used.\nPlease select another free coordinates."
-      tui.stoneWarning() should be(warningMsg)
     }
     "should provide a message to show which player is playing with the amount of stones played" in {
       controller.create_empty_Board()
