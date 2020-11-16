@@ -93,7 +93,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("Invalid")
       tui.gpTwoSeparator = false
     }
-    "should handle a valid mill input in GPTWO" in {
+    "should handle a mill input in GPTWO" in {
       // Player Two Stone move
       tui.processGameInputLine("12")
       tui.processGameInputLine("33")
@@ -101,6 +101,9 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("32")
       tui.processGameInputLine("11")
 
+      tui.newMill should be(true)
+      // Player One Invalid Remove Stone input
+      tui.processGameInputLine("Invalid")
       tui.newMill should be(true)
       // Player One Remove Competitor Stone
       tui.processGameInputLine("33")
