@@ -36,42 +36,63 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should handle a valid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE
       controller.create_empty_Board()
+
+      // PlayerOne
       tui.processGameInputLine("11")
       controller.board.stone(0, 0) should be(Stone(1))
 
+      // PlayerTwo
       tui.processGameInputLine("12")
       controller.board.stone(0, 1) should be(Stone(2))
     }
     "should handle an invalid input in GPONE" in {
-      controller.gameStatus = GameStatus.GPONE
+      // PlayerOne
       tui.processGameInputLine("Invalid")
     }
     "should handle a valid mill input in GPONE" in {
+      // PlayerOne
       tui.processGameInputLine("18")
+      // PlayerTwo
       tui.processGameInputLine("13")
+      // PlayerOne
       tui.processGameInputLine("17")
       tui.newMill should be(true)
+      // PlayerOne
       tui.processGameInputLine("12")
       controller.board.check_stone_Set(0, 1) should be(false)
     }
     "should change from GPONE to GPTWO" in {
+      // PlayerTwo
       tui.processGameInputLine("12")
+      // PlayerOne
       tui.processGameInputLine("14")
+      // PlayerTwo
       tui.processGameInputLine("15")
+      // PlayerOne
       tui.processGameInputLine("16")
+      // PlayerTwo
       tui.processGameInputLine("21")
+      // PlayerOne
       tui.processGameInputLine("22")
+      // PlayerTwo
       tui.processGameInputLine("23")
+      // PlayerOne
       tui.processGameInputLine("24")
+      // PlayerTwo
       tui.processGameInputLine("25")
+      // PlayerOne
       tui.processGameInputLine("26")
+      // PlayerTwo
       tui.processGameInputLine("27")
+      // PlayerOne
       tui.processGameInputLine("28")
+      // PlayerTwo
       tui.processGameInputLine("31")
       controller.gameStatus should be(GameStatus.GPTWO)
     }
 
     "should handle a valid input in GPTWO" in {
+      // PlayerOne
       tui.processGameInputLine("28")
       tui.processGameInputLine("38")
 
@@ -80,11 +101,30 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
     "should handle an invalid input in GPTWO" in {
       tui.gpTwoSeparator = false
+      // PlayerTwo
       tui.processGameInputLine("Invalid")
 
       tui.gpTwoSeparator = true
+      // PlayerTwo
       tui.processGameInputLine("Invalid")
       tui.gpTwoSeparator = false
+    }
+    "should handle a valid mill input in GPTWO" in {
+      // PlayerTwo
+      tui.processGameInputLine("31")
+      tui.processGameInputLine("32")
+      // PlayerOne
+      tui.processGameInputLine("18")
+      tui.processGameInputLine("28")
+      // PlayerTwo
+      tui.processGameInputLine("32")
+      tui.processGameInputLine("31")
+      // PlayerOne
+      tui.processGameInputLine("11")
+      tui.processGameInputLine("18")
+      tui.newMill should be(true)
+      // PlayerOne
+      tui.processGameInputLine("31")
     }
 
     "should change from GPTWO to GPTHREE" in {
@@ -95,12 +135,30 @@ class TuiSpec extends AnyWordSpec with Matchers{
 
     "should handle an invalid input in GPTHREE" in {
       tui.gpTwoSeparator = false
+      // PlayerOne
       tui.processGameInputLine("Invalid")
-
       tui.gpTwoSeparator = true
+      // PlayerOne
       tui.processGameInputLine("Invalid")
       tui.gpTwoSeparator = false
+      println(tui.updateBoard(controller.board))
+      println("#################################")
     }
+    "should handle a valid mill input in GPTHREE" in {
+      // PlayerOne
+      tui.processGameInputLine("38")
+      tui.processGameInputLine("31")
+      // PlayerTwo
+      tui.processGameInputLine("12")
+      tui.processGameInputLine("11")
+      // PlayerOne
+      tui.processGameInputLine("31")
+      tui.processGameInputLine("38")
+      tui.newMill should be(true)
+      // PlayerOne
+      tui.processGameInputLine("11")
+    }
+
 
     "should change from GPTHREE to END" in {
       controller.players(0).MAX_STONE = 2
