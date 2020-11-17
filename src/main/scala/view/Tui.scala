@@ -35,6 +35,13 @@ class Tui(controller: Controller) extends Observer{
     input match {
       case "q" =>
       case "h" => println(helpBoard())
+      case "n" => {
+        controller.players(0).MAX_STONE = 9
+        controller.players(1).MAX_STONE = 9
+        currentPlayer = controller.players(1)
+        println(gamePhaseOneBegin())
+        controller.create_empty_Board()
+      }
       case _ =>
         controller.gameStatus match {
           case GameStatus.GPONE =>
@@ -77,6 +84,7 @@ class Tui(controller: Controller) extends Observer{
               }
             }
             else{ handleMillInputString(input) }
+          case GameStatus.END =>
         }
     }
   }
@@ -210,7 +218,7 @@ class Tui(controller: Controller) extends Observer{
   }
 
   def updateBoard(board: Board): String={
-    val uiBoard = board.stones.rows.map(i => i.map(color_matcher))
+    val uiBoard = board.stones.vectors.map(i => i.map(color_matcher))
 
     val updateString = s"               ${uiBoard(0)(0)}----------------------------${uiBoard(0)(1)}----------------------------${uiBoard(0)(2)}\n" +
       "               |                            |                            |\n" +
@@ -283,14 +291,12 @@ class Tui(controller: Controller) extends Observer{
   override def update: Unit = {
     if(controller.gameStatus == GameStatus.GPTWO) println(currentGameScore())
     println(updateBoard(controller.board))
-    if (currentPlayer.color == 0) {
-      currentPlayer = controller.players(0)
-      println(playerGamePhaseOneTurns())
-    }
+    if (currentPlayer.color == 0) currentPlayer = controller.players(1)
     if (controller.newMill) {
       println(s"New Mill on Board\n${currentPlayer.name} what stone do you want to remove?")
       newMill = !newMill
     }
+
   }
 
   override def updatePlayer: Unit = {
@@ -300,24 +306,46 @@ class Tui(controller: Controller) extends Observer{
         case GameStatus.GPONE =>
           if (controller.amountOfPlayerStones(1) == controller.players(0).MAX_STONE &&
             controller.amountOfPlayerStones(2) == controller.players(1).MAX_STONE) {
-            println(gamePhaseTwoBegin())
-            println(mainGamePhaseTurns())
+            val competitorPlayer = controller.players.filter(i => i != currentPlayer)(0)
+            if (!controller.checkBoardForNeighbours(currentPlayer.color)) {
+              controller.gameStatus = GameStatus.END
+              println(endGameScreen(competitorPlayer))
+            }
+            else {
+              println(gamePhaseTwoBegin())
+              println(mainGamePhaseTurns())
+            }
           }
           else println(playerGamePhaseOneTurns())
 
         case GameStatus.GPTWO =>
-          if (controller.players(0).MAX_STONE == 3 || controller.players(1).MAX_STONE == 3) {
-            println(gamePhaseThreeBegin())
-            println(mainGamePhaseTurns())
-          } else println(mainGamePhaseTurns())
+          val optionPlayer = controller.players.filter(i => i != currentPlayer)(0)
+          if (controller.checkBoardForNeighbours(optionPlayer.color)) {
+            controller.gameStatus = GameStatus.END
+            println(endGameScreen(currentPlayer))
+          }
+          else {
+            if (controller.players(0).MAX_STONE == 3 || controller.players(1).MAX_STONE == 3) {
+              println(gamePhaseThreeBegin())
+              println(mainGamePhaseTurns())
+            } else println(mainGamePhaseTurns())
+          }
 
         case GameStatus.GPTHREE =>
-          if (controller.players(0).MAX_STONE == 2) {
-            println(endGameScreen(controller.players(1)))
+          val optionPlayer = controller.players.filter(i => i != currentPlayer)(0)
+          if (controller.checkBoardForNeighbours(optionPlayer.color)) {
+            controller.gameStatus = GameStatus.END
+            println(endGameScreen(currentPlayer))
           }
-          else if (controller.players(1).MAX_STONE == 2) {
-            println(endGameScreen(controller.players(0)))
+          else {
+            if (controller.players(0).MAX_STONE == 2) {
+              println(endGameScreen(controller.players(1)))
+            }
+            else if (controller.players(1).MAX_STONE == 2) {
+              println(endGameScreen(controller.players(0)))
+            }
           }
+        case GameStatus.END =>
       }
     }
   }

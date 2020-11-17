@@ -1,15 +1,26 @@
-import com.sun.net.httpserver.Authenticator.Success
 
-import scala.util.{Failure, Success, Try}
+val boardVector = Vector(Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 0))
 
-case class eitherPattern(input: Try[Any]) {
-  def validLenght:eitherPattern = input match {
-    case Success(str: String) => if(str.length == 2) copy(Success(str)) else throw new Exception("Invalid lenght")
-    case Failure(exception) => copy(Failure(exception))
+def check_Board_For_Neighbours(color: Int): Boolean = {
+
+  val stoneCoordinates = for{
+    (i, j) <- boardVector.zipWithIndex
+    (s, n) <- i.zipWithIndex
+    if s == color
+  } yield {
+      val coord = (j, n)
+      coord
+    }
+  val stoneNeighbours = for{
+    i <- stoneCoordinates
+  } yield {
+    val neighbourList = Vector((i._1, if(i._2 - 1 < 0) 2 else i._2 - 1),(i._1, if(i._2 + 1 > 2) 0 else i._2 + 1))
+    neighbourList
   }
-  def validInt: eitherPattern = input match {
-    case Success(str: String) => if(str forall Character.isDigit) copy(Success(str)) else throw new Exception("No Integer")
-    case Failure(exception) => copy(Failure(exception))
-  }
+  val neighbours = stoneNeighbours.flatMap(i => i).filter(i => i == 0)
+  println(stoneCoordinates)
+  println(neighbours)
+  if( !neighbours.isEmpty) true else false
 }
-val test = Try(eitherPattern(Success("11")).validLenght.validInt.input).get
+
+check_Board_For_Neighbours(1)

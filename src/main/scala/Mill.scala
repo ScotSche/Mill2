@@ -22,7 +22,7 @@ object Mill {
       tui.processInputLine(input)
       if(input == "n"){
         playerInputIteration()
-        tui.gamePhaseOneBegin()
+        println(tui.gamePhaseOneBegin())
         controller.create_empty_Board()
         do{
           input = readLine()

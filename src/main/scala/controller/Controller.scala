@@ -11,6 +11,7 @@ class Controller(var board: Board, var players: Vector[Player]) extends Observab
   def create_empty_Board(): Unit = {
     board = new Board
     notifyObservers
+    notifyPlayerObserver
   }
   def moveStone(old_position: (Int, Int), new_position: (Int, Int), color: Int): Unit = {
     val oldBoard = board;
@@ -34,11 +35,9 @@ class Controller(var board: Board, var players: Vector[Player]) extends Observab
     else if(pos_num < 1 || pos_num > 8) { false }
     else{ true }
   }
-
-  /*def verifyMill(color: Int): Boolean = {
-    println(board.check_mill(color))
-    board.check_mill(color)
-  }*/
+  def checkBoardForNeighbours(color: Int): Boolean = {
+    board.check_Board_For_Neighbours(color)
+  }
 
   def amountOfPlayerStones(color: Int): Int = {
     board.amount_of_played_stones(color)
@@ -51,12 +50,6 @@ class Controller(var board: Board, var players: Vector[Player]) extends Observab
   def create_new_Players(player1_name: String, player2_name: String) : Unit = {
     players = Vector(Player(player1_name, 1, 9), Player(player2_name, 2, 9))
   }
-
-  //def check_possible_moves(position: Vector[Int], color: Int)
-
-  //def show_possible_moves()
-
-  //def move_stone()
 
   def getCompetitorStone(color: Int): Int ={
     color match {

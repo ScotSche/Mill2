@@ -43,7 +43,6 @@ case class InputHandlerPattern(input: Try[Any]) {
       val neighbourList = List((value._1, if(value._2 - 1 < 0) 7 else value._2 - 1), (value._1, if(value._2 + 1 > 7) 0 else value._2 + 1))
       if(value._2 % 2 == 0){
         val validNeighbours = neighbourList.filter((value: (Int, Int)) => !board.check_stone_Set(value._1, value._2))
-        println(validNeighbours)
         if( !validNeighbours.isEmpty) copy(Success(value :: validNeighbours)) else copy(Failure(new InputException("There are no possible moves for this stone")))
       }
       // Middle Stones
