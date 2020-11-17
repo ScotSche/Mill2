@@ -86,8 +86,23 @@ class InputHandlerPatternSpec extends AnyWordSpec with Matchers{
       }
 
       "check if stone has valid neighbours for 'Stone-Move'" in {
-        val success = Try(InputHandlerPattern(Success((0, 0))).validatePossibleNeighbourStones(board).input).get
-        success should be(Success(List((0, 0), (0, 7))))
+        val success1 = Try(InputHandlerPattern(Success((0, 0))).validatePossibleNeighbourStones(board).input).get
+        success1 should be(Success(List((0, 0), (0, 7))))
+
+        board = board.update_board(0, 3, 1)
+        val success2 = Try(InputHandlerPattern(Success((0, 3))).validatePossibleNeighbourStones(board).input).get
+        success2 should be(Success(List((0, 3), (0, 2), (0, 4), (1, 3))))
+
+        board = board.update_board(0, 3, 0)
+        board = board.update_board(1, 3, 1)
+        val success3 = Try(InputHandlerPattern(Success((1, 3))).validatePossibleNeighbourStones(board).input).get
+        success3 should be(Success(List((1, 3), (1, 2), (1, 4), (2, 3), (0, 3))))
+
+        board = board.update_board(1, 3, 0)
+        board = board.update_board(2, 3, 1)
+        val success4 = Try(InputHandlerPattern(Success((2, 3))).validatePossibleNeighbourStones(board).input).get
+        success4 should be(Success(List((2, 3), (2, 2), (2, 4), (1, 3))))
+        board = board.update_board(2, 3, 0)
         board = board.update_board(0, 7, 2)
         val error = Try(InputHandlerPattern(Success((0, 0))).validatePossibleNeighbourStones(board).input).get
         error match {
