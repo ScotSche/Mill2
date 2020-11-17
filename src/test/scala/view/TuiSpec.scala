@@ -72,11 +72,11 @@ class TuiSpec extends AnyWordSpec with Matchers{
     }
 
     "should handle a valid input in GPTWO" in {
-      tui.processGameInputLine("11")
-      tui.processGameInputLine("32")
+      tui.processGameInputLine("28")
+      tui.processGameInputLine("38")
 
-      controller.board.stone(0, 0) should be(Stone(0))
-      controller.board.stone(2, 1) should be(Stone(1))
+      controller.board.stone(1, 7) should be(Stone(0))
+      controller.board.stone(2, 7) should be(Stone(1))
     }
     "should handle an invalid input in GPTWO" in {
       tui.gpTwoSeparator = false
@@ -86,34 +86,13 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processGameInputLine("Invalid")
       tui.gpTwoSeparator = false
     }
-    "should handle a mill input in GPTWO" in {
-      // Player Two Stone move
-      tui.processGameInputLine("12")
-      tui.processGameInputLine("33")
-      // Player One Stone move
-      tui.processGameInputLine("32")
-      tui.processGameInputLine("11")
 
-      tui.newMill should be(true)
-      // Player One Invalid Remove Stone input
-      tui.processGameInputLine("Invalid")
-      tui.newMill should be(true)
-      // Player One Remove Competitor Stone
-      tui.processGameInputLine("33")
-    }
     "should change from GPTWO to GPTHREE" in {
       controller.players(0).MAX_STONE = 3
       controller.notifyPlayerObserver
       controller.gameStatus should be(GameStatus.GPTHREE)
     }
 
-    "should handle a valid input in GPTHREE" in {
-      tui.processGameInputLine("14")
-      tui.processGameInputLine("12")
-
-      controller.board.stone(0, 3) should be(Stone(0))
-      controller.board.stone(0, 1) should be(Stone(1))
-    }
     "should handle an invalid input in GPTHREE" in {
       tui.gpTwoSeparator = false
       tui.processGameInputLine("Invalid")
@@ -121,19 +100,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.gpTwoSeparator = true
       tui.processGameInputLine("Invalid")
       tui.gpTwoSeparator = false
-    }
-    "should handle a valid mill input in GPTHREE" in {
-      println(tui.currentPlayer)
-      // Player Two Stone move
-      tui.processGameInputLine("15")
-      tui.processGameInputLine("33")
-      // Player One Stone move
-      tui.processGameInputLine("11")
-      tui.processGameInputLine("32")
-
-      tui.newMill should be(true)
-      // Player One Remove Competitor Stone
-      tui.processGameInputLine("33")
     }
 
     "should change from GPTHREE to END" in {
