@@ -1,7 +1,7 @@
 package view
 
 import controller.{Controller, GameStatus}
-import model.{Board, InputHandlerPattern, MaybeInput, Player, Stone}
+import model.{Board, InputHandlerPattern, Player, Stone}
 import util.Observer
 
 import scala.collection.mutable.ListBuffer
@@ -12,6 +12,7 @@ class Tui(controller: Controller) extends Observer{
   var currentPlayer = Player("", 0, 0)
   var gpTwoSeparator = false
   var gpTwoList = new ListBuffer[(Int, Int)]()
+  var stoneNeighbours: List[(Int, Int)] = List()
   var newMill = false
 
   def processInputLine(input: String): Unit = {
@@ -49,7 +50,7 @@ class Tui(controller: Controller) extends Observer{
 
               inputResult match {
                 case Success(value: (Int, Int)) =>
-                  controller.setStone((value._1 - 1), (value._2 - 1), currentPlayer.color)
+                  controller.setStone(value._1, value._2, currentPlayer.color)
                 case Failure(exception) => println(exception)
               }
             }
@@ -86,12 +87,15 @@ class Tui(controller: Controller) extends Observer{
         .validateCharactersAsInt
         .validateCoordinatesOnBoard
         .validateOwnPlayerStone(controller.board, currentPlayer.color)
+        .validatePossibleNeighbourStones(controller.board)
         .input
       ).get
 
     inputResult match {
-      case Success(value: (Int, Int)) =>
-        gpTwoList += Tuple2((value._1 - 1), (value._2 - 1))
+      case Success(value: List[(Int, Int)]) =>
+        val mainStone :: neighbours = value
+        gpTwoList += Tuple2(mainStone._1, mainStone._2)
+        stoneNeighbours = neighbours
         gpTwoSeparator = !gpTwoSeparator
         println(mainGamePhaseTurns())
       case Failure(exception) => println(exception)
@@ -104,12 +108,13 @@ class Tui(controller: Controller) extends Observer{
         .validateCharactersAsInt
         .validateCoordinatesOnBoard
         .validateStonePosition(controller.board)
+        .validateNeighboursWithInput(stoneNeighbours)
         .input
       ).get
 
     inputResult match {
       case Success(value: (Int, Int)) =>
-        gpTwoList += Tuple2((value._1 - 1), (value._2 - 1))
+        gpTwoList += Tuple2(value._1, value._2)
         val list = gpTwoList.toList
         controller.moveStone(list(0), list(1), currentPlayer.color)
         gpTwoList = new ListBuffer[(Int, Int)]
@@ -136,7 +141,7 @@ class Tui(controller: Controller) extends Observer{
     inputResult match {
       case Success(value: (Int, Int)) =>
         newMill = !newMill
-        controller.remove_stone((value._1 - 1), (value._2 - 1), currentPlayer.color)
+        controller.remove_stone(value._1, value._2, currentPlayer.color)
       case Failure(exception) => println(exception)
     }
   }
