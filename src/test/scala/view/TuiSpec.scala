@@ -49,7 +49,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
       // PlayerOne
       tui.processGameInputLine("Invalid")
     }
-    "should handle a valid mill input in GPONE" in {
+    "should handle an invalid and a valid mill input in GPONE" in {
       // PlayerOne
       tui.processGameInputLine("18")
       // PlayerTwo
@@ -57,7 +57,9 @@ class TuiSpec extends AnyWordSpec with Matchers{
       // PlayerOne
       tui.processGameInputLine("17")
       tui.newMill should be(true)
-      // PlayerOne
+      // PlayerOne Invalid
+      tui.processGameInputLine("00")
+      // PlayerOne Valid
       tui.processGameInputLine("12")
       controller.board.check_stone_Set(0, 1) should be(false)
     }
@@ -158,7 +160,6 @@ class TuiSpec extends AnyWordSpec with Matchers{
       // PlayerOne
       tui.processGameInputLine("11")
     }
-
 
     "should change from GPTHREE to END" in {
       controller.players(0).MAX_STONE = 2
