@@ -32,6 +32,13 @@ class TuiSpec extends AnyWordSpec with Matchers{
     "should print the help board on input 'h' in game mode" in {
       tui.processGameInputLine("h")
     }
+    "should start a new game on input 'n' in game mode" in {
+      tui.processGameInputLine("n")
+      controller.players(0).MAX_STONE should be(9)
+      controller.players(1).MAX_STONE should be(9)
+      tui.currentPlayer should be(controller.players(1))
+      controller.board should be(new Board)
+    }
 
     "should handle a valid input in GPONE" in {
       controller.gameStatus = GameStatus.GPONE

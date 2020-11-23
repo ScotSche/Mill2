@@ -38,7 +38,7 @@ class Tui(controller: Controller) extends Observer{
       case "n" => {
         controller.players(0).MAX_STONE = 9
         controller.players(1).MAX_STONE = 9
-        currentPlayer = controller.players(1)
+        currentPlayer = controller.players(0)
         println(gamePhaseOneBegin())
         controller.create_empty_Board()
       }
