@@ -142,6 +142,7 @@ class TuiSpec extends AnyWordSpec with Matchers{
       controller.notifyPlayerObserver
       controller.gameStatus should be(GameStatus.END)
 
+      controller.gameStatus = GameStatus.GPTHREE
       controller.board.update_board(0, 0, 1)
       controller.board.update_board(0, 1, 2)
       controller.board.update_board(0, 7, 2)
