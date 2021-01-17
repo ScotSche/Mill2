@@ -220,25 +220,26 @@ class Tui(controller: Controller) extends Observer{
   def updateBoard(board: Board): String={
     val uiBoard = board.stones.vectors.map(i => i.map(color_matcher))
 
-    val updateString = s"               ${uiBoard(0)(0)}----------------------------${uiBoard(0)(1)}----------------------------${uiBoard(0)(2)}\n" +
-      "               |                            |                            |\n" +
-      "               |                            |                            |\n" +
-      s"               |          ${uiBoard(1)(0)}-----------------${uiBoard(1)(1)}-----------------${uiBoard(1)(2)}          |\n" +
-      "               |          |                 |                 |          |\n" +
-      "               |          |                 |                 |          |\n" +
-      s"               |          |         ${uiBoard(2)(0)}-------${uiBoard(2)(1)}-------${uiBoard(2)(2)}         |          |\n" +
-      "               |          |         |               |         |          |\n" +
-      "               |          |         |               |         |          |\n" +
-      s"               ${uiBoard(0)(7)}----------${uiBoard(1)(7)}---------${uiBoard(2)(7)}               ${uiBoard(2)(3)}---------${uiBoard(1)(3)}----------${uiBoard(0)(3)}\n" +
-      "               |          |         |               |         |          |\n" +
-      "               |          |         |               |         |          |\n" +
-      s"               |          |         ${uiBoard(2)(6)}-------${uiBoard(2)(5)}-------${uiBoard(2)(4)}         |          |\n" +
-      "               |          |                 |                 |          |\n" +
-      "               |          |                 |                 |          |\n" +
-      s"               |          ${uiBoard(1)(6)}-----------------${uiBoard(1)(5)}-----------------${uiBoard(1)(4)}          |\n" +
-      "               |                            |                            |\n" +
-      "               |                            |                            |\n" +
-      s"               ${uiBoard(0)(6)}----------------------------${uiBoard(0)(5)}----------------------------${uiBoard(0)(4)}\n"
+    val updateString = s"""
+      :               ${uiBoard(0)(0)}----------------------------${uiBoard(0)(1)}----------------------------${uiBoard(0)(2)}
+      :               |                            |                            |
+      :               |                            |                            |
+      :               |          ${uiBoard(1)(0)}-----------------${uiBoard(1)(1)}-----------------${uiBoard(1)(2)}          |
+      :               |          |                 |                 |          |
+      :               |          |                 |                 |          |
+      :               |          |         ${uiBoard(2)(0)}-------${uiBoard(2)(1)}-------${uiBoard(2)(2)}         |          |
+      :               |          |         |               |         |          |
+      :               |          |         |               |         |          |
+      :               ${uiBoard(0)(7)}----------${uiBoard(1)(7)}---------${uiBoard(2)(7)}               ${uiBoard(2)(3)}---------${uiBoard(1)(3)}----------${uiBoard(0)(3)}
+      :               |          |         |               |         |          |
+      :               |          |         |               |         |          |
+      :               |          |         ${uiBoard(2)(6)}-------${uiBoard(2)(5)}-------${uiBoard(2)(4)}         |          |
+      :               |          |                 |                 |          |
+      :               |          |                 |                 |          |
+      :               |          ${uiBoard(1)(6)}-----------------${uiBoard(1)(5)}-----------------${uiBoard(1)(4)}          |
+      :               |                            |                            |
+      :               |                            |                            |
+      :               ${uiBoard(0)(6)}----------------------------${uiBoard(0)(5)}----------------------------${uiBoard(0)(4)}""".stripMargin(':')
     updateString
   }
   def helpBoard(): String = """

@@ -123,6 +123,29 @@ class TuiSpec extends AnyWordSpec with Matchers {
       tui.color_matcher(Stone(1)) should be("W")
       tui.color_matcher(Stone(2)) should be("B")
     }
+    "should show dynamic board dependent on stones" in {
+      val boardString: String = """
+        :               O----------------------------O----------------------------O
+        :               |                            |                            |
+        :               |                            |                            |
+        :               |          O-----------------O-----------------O          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               O----------O---------O               O---------O----------O
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          O-----------------O-----------------O          |
+        :               |                            |                            |
+        :               |                            |                            |
+        :               O----------------------------O----------------------------O""".stripMargin(':')
+      tui.updateBoard(controller.board) should be(boardString)
+    }
   }
 }
 /*"A Mill Tui" should{
