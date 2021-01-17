@@ -17,6 +17,15 @@ class TuiSpec extends AnyWordSpec with Matchers {
       tui.processInputLine("n")
       controller.board should be(new Board)
     }
+    "should provide a help board on input 'h'" in {
+      tui.processInputLine("h")
+    }
+    "should end the game on input 'q'" in {
+      tui.processInputLine("q")
+    }
+    "should notify user on any other input" in {
+      tui.processInputLine("Test")
+    }
   }
 }
 /*"A Mill Tui" should{
