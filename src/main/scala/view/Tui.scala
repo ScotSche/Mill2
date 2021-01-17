@@ -192,8 +192,8 @@ class Tui(controller: Controller) extends Observer{
   }
 
   def playerGamePhaseOneTurns(): String ={
-    val playerTurnString = s"\n${currentPlayer.name} it is your turn Place one stone on a specific coordinate " + "" +
-      s"(${controller.amountOfPlayerStones(currentPlayer.color) + 1} of ${currentPlayer.MAX_STONE}):"
+    val playerTurnString = s"""
+      |${currentPlayer.name} it is your turn Place one stone on a specific coordinate (${controller.amountOfPlayerStones(currentPlayer.color) + 1} of ${currentPlayer.MAX_STONE}):""".stripMargin('|')
     playerTurnString
   }
   def mainGamePhaseTurns(): String ={

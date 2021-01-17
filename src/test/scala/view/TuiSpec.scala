@@ -78,6 +78,27 @@ class TuiSpec extends AnyWordSpec with Matchers {
         |Please enter name of player two: """.stripMargin
       tui.playerTwoName() should be(inputString)
     }
+    "should start Game phase one" in {
+      val gpOneString: String = "Let the game begin.\nGame Phase One: Please place your stones on a free field."
+      tui.gamePhaseOneBegin() should be(gpOneString)
+      controller.gameStatus should be(GameStatus.GPONE)
+    }
+    "should start Game phase two" in {
+      val gpTwoString: String = "Game Phase Two: Move your Stones strategically and get the victory."
+      tui.gamePhaseTwoBegin() should be(gpTwoString)
+      controller.gameStatus should be(GameStatus.GPTWO)
+    }
+    "should start Game phase three" in {
+      val gpThreeString: String = "Game Phase Three: Be aware! One Player is able to jump."
+      tui.gamePhaseThreeBegin() should be(gpThreeString)
+      controller.gameStatus should be(GameStatus.GPTHREE)
+    }
+    "should provide information to each player of amount of curent stones and total stones" in {
+      val informationString: String = """
+       |PlayerOne it is your turn Place one stone on a specific coordinate (1 of 9):""".stripMargin('|')
+      tui.currentPlayer = controller.players(0)
+      tui.playerGamePhaseOneTurns() should be(informationString)
+    }
   }
 }
 /*"A Mill Tui" should{
