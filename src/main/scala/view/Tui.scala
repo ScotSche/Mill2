@@ -14,6 +14,7 @@ class Tui(controller: Controller) extends Observer{
   var gpTwoList: ListBuffer[(Int, Int)] = new ListBuffer[(Int, Int)]()
   var stoneNeighbours: List[(Int, Int)] = List()
   var newMill: Boolean = false
+  var currentStonesOnField:Vector[Int] = Vector(0, 0)
 
   def processInputLine(input: String): Unit = {
     input match {
@@ -303,8 +304,9 @@ class Tui(controller: Controller) extends Observer{
       currentPlayer = changePlayer(controller.players)
       controller.gameStatus match {
         case GameStatus.GPONE =>
-          if (controller.amountOfPlayerStones(1) == controller.players(0).MAX_STONE &&
-            controller.amountOfPlayerStones(2) == controller.players(1).MAX_STONE) {
+          currentStonesOnField = Vector(controller.amountOfPlayerStones(1), controller.amountOfPlayerStones(2))
+          if (currentStonesOnField(0) == controller.players(0).MAX_STONE &&
+            currentStonesOnField(1) == controller.players(1).MAX_STONE) {
             val competitorPlayer = controller.players.filter(i => i != currentPlayer)(0)
             if (!controller.checkBoardForNeighbours(currentPlayer.color)) {
               controller.gameStatus = GameStatus.END

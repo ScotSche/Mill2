@@ -8,175 +8,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class TuiSpec extends AnyWordSpec with Matchers {
 
-  "A Mill Tui" should{
-    val controller = new Controller(new Board, Vector())
-    controller.create_new_Players("PlayerOne", "PlayerTwo")
-    val tui = new Tui(controller)
-
-    //  processInputLine Methode
-    "create a new board on input 'n'" in {
-      tui.processInputLine("n")
-      controller.board should be(new Board)
-    }
-    "should provide a help board on input 'h'" in {
-      tui.processInputLine("h")
-    }
-    "should end the game on input 'q'" in {
-      tui.processInputLine("q")
-    }
-    "should notify user on any other input" in {
-      tui.processInputLine("Test")
-    }
-    //  processGameInputLine Methode
-    "should end the game in gameMode on input 'q'" in {
-      tui.processGameInputLine("q")
-    }
-    "should provide a help board in gameMode on input 'h'" in {
-      tui.processGameInputLine("h")
-    }
-    "should start a new game in gameMode on input 'n'" in {
-      controller.players(0).MAX_STONE = 8
-      controller.players(1).MAX_STONE = 8
-      controller.gameStatus = GameStatus.IDLE
-      tui.currentPlayer = controller.players(1)
-      tui.processGameInputLine("n")
-
-      controller.players(0).MAX_STONE should be(9)
-      controller.players(1).MAX_STONE should be(9)
-      controller.gameStatus should be(GameStatus.GPONE)
-    }
-
-    "should change between both players during the game" in {
-      tui.currentPlayer = controller.players(0)
-      tui.changePlayer(controller.players) should be(controller.players(1))
-
-      tui.currentPlayer = controller.players(1)
-      tui.changePlayer(controller.players) should be(controller.players(0))
-    }
-    "should provide a welcome screen" in {
-      val welcomeScreen: String = """
-        :**********************************************************************************************
-        :*                                       WELCOME TO                                           *
-        :*  __________   __     __   ________      _____      ______    __    __           __         *
-        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
-        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
-        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
-        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
-        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
-        :*                                        IN SCALA                                            *
-        :**********************************************************************************************
-        :Press 'n' for new Game
-        :Press 'h' for help
-        :Press 'q' to quit """.stripMargin(':')
-      tui.welcomeScreen() should be(welcomeScreen)
-    }
-    "should provide a goodbye screen" in {
-      val goodbyeScreen: String = """
-        :**********************************************************************************************
-        :*                                  THANK YOU FOR PLAYING                                     *
-        :*  __________   __     __   ________      _____      ______    __    __           __         *
-        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
-        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
-        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
-        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
-        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
-        :*                                        IN SCALA                                            *
-        :********************************************************************************************** """.stripMargin(':')
-    tui.goodbyeScreen() should be(goodbyeScreen)
-    }
-    "should provide an endgame screen" in {
-      val endgameScreen: String = """
-        :                         ***************************************
-        :                            Congratulations PlayerOne!
-        :                            you won the game
-        :                            Press q to quit or n for new Game
-        :                         *************************************** """.stripMargin(':')
-      tui.endGameScreen(controller.players(0)) should be(endgameScreen)
-    }
-    "should provide a player one input string" in {
-      val inputString: String = """
-        |Please enter name of player one: """.stripMargin
-      tui.playerOneName() should be(inputString)
-    }
-    "should provide a player two input string" in {
-      val inputString: String = """
-        |Please enter name of player two: """.stripMargin
-      tui.playerTwoName() should be(inputString)
-    }
-    "should start Game phase one" in {
-      val gpOneString: String = "Let the game begin.\nGame Phase One: Please place your stones on a free field."
-      tui.gamePhaseOneBegin() should be(gpOneString)
-      controller.gameStatus should be(GameStatus.GPONE)
-    }
-    "should start Game phase two" in {
-      val gpTwoString: String = "Game Phase Two: Move your Stones strategically and get the victory."
-      tui.gamePhaseTwoBegin() should be(gpTwoString)
-      controller.gameStatus should be(GameStatus.GPTWO)
-    }
-    "should start Game phase three" in {
-      val gpThreeString: String = "Game Phase Three: Be aware! One Player is able to jump."
-      tui.gamePhaseThreeBegin() should be(gpThreeString)
-      controller.gameStatus should be(GameStatus.GPTHREE)
-    }
-    "should provide information to each player of amount of curent stones and total stones" in {
-      val informationString: String = """
-       |PlayerOne it is your turn Place one stone on a specific coordinate (1 of 9):""".stripMargin('|')
-      tui.currentPlayer = controller.players(0)
-      tui.playerGamePhaseOneTurns() should be(informationString)
-    }
-    "should show specific information within main phase to position stone" in {
-      tui.gpTwoSeparator = false
-      val firstString: String = "PlayerOne choose the stone you want to move:"
-      tui.mainGamePhaseTurns() should be(firstString)
-
-      tui.gpTwoSeparator = true
-      val secondString: String = "PlayerOne where do you want to place it:"
-      tui.mainGamePhaseTurns() should be(secondString)
-    }
-    "should provide current game score" in {
-      val gameScoreString: String = "                                         9 vs. 9\n"
-      tui.currentGameScore() should be(gameScoreString)
-    }
-    "should match color from integer to readable Strings (chars)" in {
-      tui.color_matcher(Stone(0)) should be("O")
-      tui.color_matcher(Stone(1)) should be("W")
-      tui.color_matcher(Stone(2)) should be("B")
-    }
-    "should show dynamic board dependent on stones" in {
-      val boardString: String = """
-        :               O----------------------------O----------------------------O
-        :               |                            |                            |
-        :               |                            |                            |
-        :               |          O-----------------O-----------------O          |
-        :               |          |                 |                 |          |
-        :               |          |                 |                 |          |
-        :               |          |         O-------O-------O         |          |
-        :               |          |         |               |         |          |
-        :               |          |         |               |         |          |
-        :               O----------O---------O               O---------O----------O
-        :               |          |         |               |         |          |
-        :               |          |         |               |         |          |
-        :               |          |         O-------O-------O         |          |
-        :               |          |                 |                 |          |
-        :               |          |                 |                 |          |
-        :               |          O-----------------O-----------------O          |
-        :               |                            |                            |
-        :               |                            |                            |
-        :               O----------------------------O----------------------------O""".stripMargin(':')
-      tui.updateBoard(controller.board) should be(boardString)
-    }
-    "should do nothing to updatePlayer on Gamestatus END" in {
-      controller.gameStatus = GameStatus.END
-      tui.updatePlayer()
-    }
-    "should handle an invalid select stone input" in {
-      tui.currentPlayer = controller.players(0)
-      tui.handleNormalSelectStone("11")
-      tui.gpTwoList.isEmpty should be(true)
-    }
-  }
-}
-/*"A Mill Tui" should{
+"A Mill Tui" should{
     val controller = new Controller(new Board, Vector())
     controller.create_new_Players("PlayerOne", "PlayerTwo")
     val tui = new Tui(controller)
@@ -340,12 +172,12 @@ class TuiSpec extends AnyWordSpec with Matchers {
       tui.welcomeScreen() should be(welcomeScreen)
     }
     "should provide an endscreen" in {
-      val endScreen =
-        "                         ***************************************\n" +
-        "                            Congratulations PlayerOne!\n" +
-        "                            you won the game\n" +
-        "                            Press q to quit or n for new Game\n" +
-        "                         ***************************************"
+      val endScreen = """
+        |                         ***************************************
+        |                            Congratulations PlayerOne!
+        |                            you won the game
+        |                            Press q to quit or n for new Game
+        |                         *************************************** """.stripMargin('|')
         tui.endGameScreen(controller.players(0)) should be(endScreen)
     }
     "should provide a goodbye screen" in {
@@ -412,7 +244,8 @@ class TuiSpec extends AnyWordSpec with Matchers {
     "should provide a message to show which player is playing with the amount of stones played" in {
       controller.create_empty_Board()
       tui.currentPlayer = Player("Your Name", 1, 9)
-      val playerMsg = "\nYour Name it is your turn Place one stone on a specific coordinate (1 of 9):"
+      val playerMsg = """
+        |Your Name it is your turn Place one stone on a specific coordinate (1 of 9):""".stripMargin('|')
       tui.playerGamePhaseOneTurns() should be(playerMsg)
     }
     "should provide a dialog in GPTWO for player interaction" in {
@@ -432,66 +265,66 @@ class TuiSpec extends AnyWordSpec with Matchers {
       val filledPlayerOneBoard = emptyBoard.update_board(0, 0, 1)
       val filledPlayerTwoBoard = emptyBoard.update_board(0, 0, 2)
 
-      val emptyBoardString =
-        "               O----------------------------O----------------------------O\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               O----------O---------O               O---------O----------O\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               O----------------------------O----------------------------O\n"
-      val filledPlayerOneBoardString =
-        "               W----------------------------O----------------------------O\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               O----------O---------O               O---------O----------O\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               O----------------------------O----------------------------O\n"
-      val filledPlayerTwoBoardString =
-        "               B----------------------------O----------------------------O\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               O----------O---------O               O---------O----------O\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         |               |         |          |\n" +
-          "               |          |         O-------O-------O         |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          |                 |                 |          |\n" +
-          "               |          O-----------------O-----------------O          |\n" +
-          "               |                            |                            |\n" +
-          "               |                            |                            |\n" +
-          "               O----------------------------O----------------------------O\n"
+      val emptyBoardString = """
+        :               O----------------------------O----------------------------O
+        :               |                            |                            |
+        :               |                            |                            |
+        :               |          O-----------------O-----------------O          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               O----------O---------O               O---------O----------O
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          O-----------------O-----------------O          |
+        :               |                            |                            |
+        :               |                            |                            |
+        :               O----------------------------O----------------------------O""".stripMargin(':')
+      val filledPlayerOneBoardString = """
+        :               W----------------------------O----------------------------O
+        :               |                            |                            |
+        :               |                            |                            |
+        :               |          O-----------------O-----------------O          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               O----------O---------O               O---------O----------O
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          O-----------------O-----------------O          |
+        :               |                            |                            |
+        :               |                            |                            |
+        :               O----------------------------O----------------------------O""".stripMargin(':')
+      val filledPlayerTwoBoardString = """
+        :               B----------------------------O----------------------------O
+        :               |                            |                            |
+        :               |                            |                            |
+        :               |          O-----------------O-----------------O          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               O----------O---------O               O---------O----------O
+        :               |          |         |               |         |          |
+        :               |          |         |               |         |          |
+        :               |          |         O-------O-------O         |          |
+        :               |          |                 |                 |          |
+        :               |          |                 |                 |          |
+        :               |          O-----------------O-----------------O          |
+        :               |                            |                            |
+        :               |                            |                            |
+        :               O----------------------------O----------------------------O""".stripMargin(':')
       tui.updateBoard(emptyBoard) should be(emptyBoardString)
       tui.updateBoard(filledPlayerOneBoard) should be(filledPlayerOneBoardString)
       tui.updateBoard(filledPlayerTwoBoard) should be(filledPlayerTwoBoardString)
@@ -513,4 +346,3 @@ class TuiSpec extends AnyWordSpec with Matchers {
     }
   }
 }
-*/
