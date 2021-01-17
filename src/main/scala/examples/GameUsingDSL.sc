@@ -20,7 +20,7 @@ def check_Board_For_Neighbours(color: Int): Boolean = {
   val neighbours = stoneNeighbours.flatMap(i => i).filter(i => i == 0)
   println(stoneCoordinates)
   println(neighbours)
-  if( !neighbours.isEmpty) true else false
+  if( neighbours.nonEmpty) true else false
 }
 
 check_Board_For_Neighbours(1)

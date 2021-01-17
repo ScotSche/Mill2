@@ -43,7 +43,7 @@ case class InputHandlerPattern(input: Try[Any]) {
       val neighbourList = List((value._1, if(value._2 - 1 < 0) 7 else value._2 - 1), (value._1, if(value._2 + 1 > 7) 0 else value._2 + 1))
       if(value._2 % 2 == 0){
         val validNeighbours = neighbourList.filter((value: (Int, Int)) => !board.check_stone_Set(value._1, value._2))
-        if( !validNeighbours.isEmpty) copy(Success(value :: validNeighbours)) else copy(Failure(new InputException("There are no possible moves for this stone")))
+        if( validNeighbours.nonEmpty) copy(Success(value :: validNeighbours)) else copy(Failure(new InputException("There are no possible moves for this stone")))
       }
       // Middle Stones
       else{
@@ -53,14 +53,14 @@ case class InputHandlerPattern(input: Try[Any]) {
           case 2 => List((value._1 - 1, value._2))
         })
         val validNeighbours = additionalNeighbourList.filter((value: (Int, Int)) => !board.check_stone_Set(value._1, value._2))
-        if( !validNeighbours.isEmpty) copy(Success(value :: validNeighbours)) else copy(Failure(new InputException("There are no possible moves for this stone")))
+        if( validNeighbours.nonEmpty) copy(Success(value :: validNeighbours)) else copy(Failure(new InputException("There are no possible moves for this stone")))
       }
     case Failure(exception) => copy(Failure(exception))
   }
   def validateNeighboursWithInput(neighbours: List[(Int, Int)]): InputHandlerPattern = input match {
     case Success(value: (Int, Int)) =>
       val result = neighbours.filter((i: (Int, Int)) => (i._1 == value._1) && (i._2 == value._2))
-      if( !result.isEmpty) copy(Success(value)) else copy(Failure(new InputException("Input does not match a possible stone position")))
+      if( result.nonEmpty) copy(Success(value)) else copy(Failure(new InputException("Input does not match a possible stone position")))
 
     case Failure(exception) => copy(Failure(exception))
   }
