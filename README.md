@@ -1,4 +1,6 @@
 # Mill2
+This code is written in Scala 2. Yet, there is also a version using Scala 3.
+To see the Scala 3 code, click [here](https://github.com/ScotSche/Mill3).
 
 ### Game setup
  1. The game is played with 2 players (only).
