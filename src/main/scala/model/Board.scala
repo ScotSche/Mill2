@@ -4,7 +4,7 @@ case class Board(stones: BoardMatrix[Stone]) {
 
   def this() = this(new BoardMatrix[Stone](Stone(0)))
 
-  def stone(rect_num: Int, pos_num: Int) = stones.stone(rect_num, pos_num)
+  def stone(rect_num: Int, pos_num: Int): Stone = stones.stone(rect_num, pos_num)
 
   def update_board(rectangle_num: Int, position_num:Int, color:Int) : Board ={
     copy(stones.replaceStone(rectangle_num, position_num, Stone(color)))
@@ -86,6 +86,6 @@ case class Board(stones: BoardMatrix[Stone]) {
     println(stoneCoordinates)
     println(stoneNeighbours)
     println(validNeighboursOnBoard)
-    if (!validNeighboursOnBoard.isEmpty) true else false
+    if (validNeighboursOnBoard.nonEmpty) true else false
   }
 }

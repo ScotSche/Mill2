@@ -1,33 +1,33 @@
 package controller
 
 import controller.GameStatus._
-import model.{Board, Player, Stone}
+import model.{Board, Player}
 import util.Observable
 
 class Controller(var board: Board, var players: Vector[Player]) extends Observable{
-  var newMill = false
+  var newMill: Boolean = false
   var gameStatus: GameStatus = IDLE
 
   def create_empty_Board(): Unit = {
     board = new Board
-    notifyObservers
-    notifyPlayerObserver
+    notifyObservers()
+    notifyPlayerObserver()
   }
   def moveStone(old_position: (Int, Int), new_position: (Int, Int), color: Int): Unit = {
     val oldBoard = board;
     board = board.update_board(old_position._1, old_position._2, 0)
     board = board.update_board(new_position._1, new_position._2, color)
     newMill = board.check_board_for_mill(oldBoard, color)
-    notifyObservers
-    notifyPlayerObserver
+    notifyObservers()
+    notifyPlayerObserver()
   }
 
   def setStone(rect_num: Int, pos_num: Int, value: Int): Unit = {
     val oldBoard = board;
     board = board.update_board(rect_num, pos_num, value)
     newMill = board.check_board_for_mill(oldBoard, value)
-    notifyObservers
-    notifyPlayerObserver
+    notifyObservers()
+    notifyPlayerObserver()
   }
 
   def checkInputCoordinates(rect_num: Int, pos_num: Int): Boolean = {
@@ -64,7 +64,7 @@ class Controller(var board: Board, var players: Vector[Player]) extends Observab
       board = board.update_board(rect_num, pos_num, 0)
       players(compStoneColor - 1).MAX_STONE -= 1
       newMill = false;
-      notifyObservers
-      notifyPlayerObserver
+      notifyObservers()
+      notifyPlayerObserver()
   }
 }
