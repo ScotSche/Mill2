@@ -68,6 +68,16 @@ class TuiSpec extends AnyWordSpec with Matchers {
         :                         *************************************** """.stripMargin(':')
       tui.endGameScreen(controller.players(0)) should be(endgameScreen)
     }
+    "should provide a player one input string" in {
+      val inputString: String = """
+        |Please enter name of player one: """.stripMargin
+      tui.playerOneName() should be(inputString)
+    }
+    "should provide a player two input string" in {
+      val inputString: String = """
+        |Please enter name of player two: """.stripMargin
+      tui.playerTwoName() should be(inputString)
+    }
   }
 }
 /*"A Mill Tui" should{
