@@ -320,7 +320,7 @@ class Tui(controller: Controller) extends Observer{
 
         case GameStatus.GPTWO =>
           val optionPlayer = controller.players.filter(i => i != currentPlayer)(0)
-          if (controller.checkBoardForNeighbours(optionPlayer.color)) {
+          if (!controller.checkBoardForNeighbours(optionPlayer.color)) {
             controller.gameStatus = GameStatus.END
             println(endGameScreen(currentPlayer))
           }
