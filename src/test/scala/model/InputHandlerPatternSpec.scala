@@ -104,8 +104,15 @@ class InputHandlerPatternSpec extends AnyWordSpec with Matchers{
         success4 should be(Success(List((2, 3), (2, 2), (2, 4), (1, 3))))
         board = board.update_board(2, 3, 0)
         board = board.update_board(0, 7, 2)
-        val error = Try(InputHandlerPattern(Success((0, 0))).validatePossibleNeighbourStones(board).input).get
-        error match {
+        val error1 = Try(InputHandlerPattern(Success((0, 0))).validatePossibleNeighbourStones(board).input).get
+        error1 match {
+          case Failure(exception) => exception.getMessage should be("There are no possible moves for this stone")
+        }
+        println(board)
+        board = board.update_board(0, 2, 1)
+        board = board.update_board(1, 1, 1)
+        val error2 = Try(InputHandlerPattern(Success((0, 1))).validatePossibleNeighbourStones(board).input).get
+        error2 match {
           case Failure(exception) => exception.getMessage should be("There are no possible moves for this stone")
         }
         val errorRail = Try(InputHandlerPattern(Failure(new Exception("Failed"))).validatePossibleNeighbourStones(board).input).get
