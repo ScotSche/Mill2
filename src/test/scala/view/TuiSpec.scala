@@ -13,6 +13,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
     controller.create_new_Players("PlayerOne", "PlayerTwo")
     val tui = new Tui(controller)
 
+    //  processInputLine Methode
     "create a new board on input 'n'" in {
       tui.processInputLine("n")
       controller.board should be(new Board)
@@ -25,6 +26,47 @@ class TuiSpec extends AnyWordSpec with Matchers {
     }
     "should notify user on any other input" in {
       tui.processInputLine("Test")
+    }
+
+    "should provide a welcome screen" in {
+      val welcomeScreen: String = """
+        :**********************************************************************************************
+        :*                                       WELCOME TO                                           *
+        :*  __________   __     __   ________      _____      ______    __    __           __         *
+        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+        :*                                        IN SCALA                                            *
+        :**********************************************************************************************
+        :Press 'n' for new Game
+        :Press 'h' for help
+        :Press 'q' to quit """.stripMargin(':')
+      tui.welcomeScreen() should be(welcomeScreen)
+    }
+    "should provide a goodbye screen" in {
+      val goodbyeScreen: String = """
+        :**********************************************************************************************
+        :*                                  THANK YOU FOR PLAYING                                     *
+        :*  __________   __     __   ________      _____      ______    __    __           __         *
+        :* |___    ___| |  |   |  | |   _____|    |   _  \   /  _   |  |  |  |  |         |  |        *
+        :*     |  |     |  |___|  | |  |_____     |  | \  \_/  / |  |  |  |  |  |         |  |        *
+        :*     |  |     |   ___   | |  ______|    |  |  \_____/  |  |  |  |  |  |         |  |        *
+        :*     |  |     |  |   |  | |  |_____     |  |           |  |  |  |  |  |______   |  |______  *
+        :*     |__|     |__|   |__| |________|    |__|           |__|  |__|  |_________|  |_________| *
+        :*                                        IN SCALA                                            *
+        :********************************************************************************************** """.stripMargin(':')
+    tui.goodbyeScreen() should be(goodbyeScreen)
+    }
+    "should provide an endgame screen" in {
+      val endgameScreen: String = """
+        :                         ***************************************
+        :                            Congratulations PlayerOne!
+        :                            you won the game
+        :                            Press q to quit or n for new Game
+        :                         *************************************** """.stripMargin(':')
+      tui.endGameScreen(controller.players(0)) should be(endgameScreen)
     }
   }
 }

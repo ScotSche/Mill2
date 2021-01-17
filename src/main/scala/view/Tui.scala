@@ -265,14 +265,12 @@ class Tui(controller: Controller) extends Observer{
 
   def endGameScreen(player: Player): String = {
     controller.gameStatus = GameStatus.END
-    val endString = {
-       "                         ***************************************\n" +
-      s"                            Congratulations ${player.name}!\n" +
-       "                            you won the game\n" +
-       "                            Press q to quit or n for new Game\n" +
-       "                         ***************************************"
-    }
-
+    val endString = s"""
+       :                         ***************************************
+       :                            Congratulations ${player.name}!
+       :                            you won the game
+       :                            Press q to quit or n for new Game
+       :                         *************************************** """.stripMargin(':')
     endString
   }
 
