@@ -27,7 +27,13 @@ class TuiSpec extends AnyWordSpec with Matchers {
     "should notify user on any other input" in {
       tui.processInputLine("Test")
     }
+    "should change between both players during the game" in {
+      tui.currentPlayer = controller.players(0)
+      tui.changePlayer(controller.players) should be(controller.players(1))
 
+      tui.currentPlayer = controller.players(1)
+      tui.changePlayer(controller.players) should be(controller.players(0))
+    }
     "should provide a welcome screen" in {
       val welcomeScreen: String = """
         :**********************************************************************************************
@@ -98,6 +104,24 @@ class TuiSpec extends AnyWordSpec with Matchers {
        |PlayerOne it is your turn Place one stone on a specific coordinate (1 of 9):""".stripMargin('|')
       tui.currentPlayer = controller.players(0)
       tui.playerGamePhaseOneTurns() should be(informationString)
+    }
+    "should show specific information within main phase to position stone" in {
+      tui.gpTwoSeparator = false
+      val firstString: String = "PlayerOne choose the stone you want to move:"
+      tui.mainGamePhaseTurns() should be(firstString)
+
+      tui.gpTwoSeparator = true
+      val secondString: String = "PlayerOne where do you want to place it:"
+      tui.mainGamePhaseTurns() should be(secondString)
+    }
+    "should provide current game score" in {
+      val gameScoreString: String = "                                         9 vs. 9\n"
+      tui.currentGameScore() should be(gameScoreString)
+    }
+    "should match color from integer to readable Strings (chars)" in {
+      tui.color_matcher(Stone(0)) should be("O")
+      tui.color_matcher(Stone(1)) should be("W")
+      tui.color_matcher(Stone(2)) should be("B")
     }
   }
 }
