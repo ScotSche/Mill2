@@ -329,10 +329,14 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.updateBoard(filledPlayerTwoBoard) should be(filledPlayerTwoBoardString)
     }
 
-    "should check in Game phase two if one player has at least 3 stones and change to GPTHREE" in {
-      controller.players(0).MAX_STONE = 3
+    "should check in Game phase two if one player has no more moves available" in {
+      controller.gameStatus = GameStatus.GPTWO
+      controller.create_empty_Board()
+      controller.setStone(0, 0, 1)
+      controller.setStone(0, 1, 2)
+      controller.setStone(0, 7, 2)
       tui.updatePlayer()
-      controller.gameStatus should be(GameStatus.GPTHREE)
+      controller.gameStatus should be(GameStatus.END)
     }
 
     "should do nothing in Game phase END" in {
