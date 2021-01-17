@@ -16,6 +16,10 @@ class TuiSpec extends AnyWordSpec with Matchers{
       tui.processInputLine("n")
       controller.board should be(new Board)
     }
+    "should start with player one" in {
+      tui.update()
+      tui.currentPlayer should be(controller.players(1))
+    }
     "should do nothing and leave loop on input 'q'" in {
       tui.processInputLine("q")
     }
