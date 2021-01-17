@@ -27,6 +27,24 @@ class TuiSpec extends AnyWordSpec with Matchers {
     "should notify user on any other input" in {
       tui.processInputLine("Test")
     }
+    //  processGameInputLine Methode
+    "should end the game in gameMode on input 'q'" in {
+      tui.processGameInputLine("q")
+    }
+    "should provide a help board in gameMode on input 'h'" in {
+      tui.processGameInputLine("h")
+    }
+    "should start a new game in gameMode on input 'n'" in {
+      controller.players(0).MAX_STONE = 8
+      controller.players(1).MAX_STONE = 8
+      controller.gameStatus = GameStatus.IDLE
+      tui.processGameInputLine("n")
+
+      controller.players(0).MAX_STONE should be(9)
+      controller.players(1).MAX_STONE should be(9)
+      controller.gameStatus should be(GameStatus.GPONE)
+    }
+
     "should change between both players during the game" in {
       tui.currentPlayer = controller.players(0)
       tui.changePlayer(controller.players) should be(controller.players(1))
@@ -145,6 +163,10 @@ class TuiSpec extends AnyWordSpec with Matchers {
         :               |                            |                            |
         :               O----------------------------O----------------------------O""".stripMargin(':')
       tui.updateBoard(controller.board) should be(boardString)
+    }
+    "should do nothing to updatePlayer on Gamestatus END" in {
+      controller.gameStatus = GameStatus.END
+      tui.updatePlayer()
     }
   }
 }
