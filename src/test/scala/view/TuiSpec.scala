@@ -38,6 +38,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
       controller.players(0).MAX_STONE = 8
       controller.players(1).MAX_STONE = 8
       controller.gameStatus = GameStatus.IDLE
+      tui.currentPlayer = controller.players(1)
       tui.processGameInputLine("n")
 
       controller.players(0).MAX_STONE should be(9)
@@ -167,6 +168,11 @@ class TuiSpec extends AnyWordSpec with Matchers {
     "should do nothing to updatePlayer on Gamestatus END" in {
       controller.gameStatus = GameStatus.END
       tui.updatePlayer()
+    }
+    "should handle an invalid select stone input" in {
+      tui.currentPlayer = controller.players(0)
+      tui.handleNormalSelectStone("11")
+      tui.gpTwoList.isEmpty should be(true)
     }
   }
 }
